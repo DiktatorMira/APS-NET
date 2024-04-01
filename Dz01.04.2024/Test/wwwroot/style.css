@@ -1,0 +1,135 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-user-drag:none;
+    user-select:none;
+    font-family:sans-serif;
+}
+body{
+    background:rgb(228, 224, 215);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.head{
+    padding:2%;
+    height:5vh;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.head h3{color:rgb(0, 97, 208);}
+.in{
+    width:20%;
+    display:flex;
+}
+.head .inpcity{
+    padding-left:.5%;
+    height:4.5vh;
+    width:78%;
+    background:rgb(249, 247, 243);
+    border:none;
+    color:rgb(0, 75, 160);
+    border-bottom:1px solid rgb(19, 121, 237);
+    border-radius:7px;
+    font-size:1em;
+    outline:none;
+    transition:.15s;
+}
+.head .inpcity:hover{border-bottom:2px solid rgb(57, 149, 255);}
+.head .inpcity:active{transform:scale(0.98);}
+.head .inpcity:focus{border-bottom:2px solid rgb(11, 75, 149);}
+.but{
+    margin-left:1.5%;
+    height:4.5vh;
+    width:20%;
+    background:rgb(249, 247, 243);
+    border-radius:7px;
+    border:none;
+    box-shadow:2px 2px 4px rgb(0, 0, 0, 0.3);
+    font-size:1em;
+    outline:none;
+    transition:.15s;
+}
+.but:hover{
+    color:rgb(0, 97, 208);
+    box-shadow:3px 3px 6px rgb(0, 0, 0, 0.5);
+}
+.but:active{transform:scale(0.97);}
+.blocks{
+    margin-top:1%;
+    height:42vh;
+    width:90%;
+    background:rgb(237, 237, 237);
+    border-radius:7px;
+    color:rgb(57, 57, 57);
+    box-shadow:2px 2px 8px rgb(0, 0, 0, 0.3);
+}
+.hsect{
+    padding:2%;
+    width:100%;
+    height:10%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.hsect h3{color:rgb(12, 116, 235);}
+.under{
+    height:80%;
+    width:100%;
+    display:flex;
+    align-items:center;
+}
+.left{
+    height:100%;
+    width:25%;
+    border-radius:7px;
+    background:cover;
+}
+.center{
+    margin-left:1%;
+    height:100%;
+    width:15%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+.center p{
+    margin-top:10%;
+    font-size:4em;
+}
+.right{
+    margin-left:3%;
+    height:100%;
+    width:20%;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+}
+.bottom{
+    padding:2%;
+    height:80%;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+}
+.wplate{
+    height:100%;
+    width:10%;
+    border:2px ridge gray;
+    border-radius:7px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+}
+.timg{
+    height:50%;
+    width:100%;
+    border-radius:7px;
+    background:cover;
+}

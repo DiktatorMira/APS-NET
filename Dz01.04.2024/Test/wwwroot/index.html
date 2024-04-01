@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width" initial-scale="1.0">
+		<title>My sinoptik</title>
+		<link rel='icon' href="textures/favicon.png"/>
+		<link rel="stylesheet" href="style.css"/>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+		<script src='script.js'></script>
+	</head>
+	<body>
+		<header class="head">
+			<h3 id="maintext">Текущая погода</h3>
+			<div class="in">
+				<input class="inpcity" type="text" placeholder="Введите город">
+				<input class="but" type="button" value="Поиск">
+			</div>
+		</header>
+		<section class="blocks">
+			<header class="hsect">
+				<h3 id="cityName">Город</h3><h3 id="date">Дата</h3>
+			</header>
+			<div class="under">
+				<img class="left" id="weatherImage">
+				<div class="center">
+					<h1 id="weatherType">Тип погоды</h1>
+					<p id="temperature">00°C</p>
+				</div>
+				<div class="right">
+					<p id="minTemperature">Мин температура:</p>
+					<p id="maxTemperature">Макс температура:</p>
+					<p id="windSpeed">Скорость ветра(км/ч):</p>
+				</div>
+			</div>
+		</section>
+		<section class="blocks">
+			<header class="head"><h3>Почасовая погода</h3></header>
+			<div class="bottom" id="hourlyWeather">
+				
+			</div>
+		</section>
+	</body>
+</html>
