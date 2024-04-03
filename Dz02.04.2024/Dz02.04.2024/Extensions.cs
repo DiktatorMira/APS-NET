@@ -1,7 +1,7 @@
 ﻿namespace Dz02._04._2024 {
     public static class FromOneToTenMiddlewareExtensions{
         public static IApplicationBuilder UseFromOneToTen(this IApplicationBuilder builder) {
-            return builder.UseMiddleware<FromOneToTenMiddlewareMiddleware>();
+            return builder.UseMiddleware<FromOneToTenMiddleware>();
         }
     }
     public static class FromElevenToNineteenExtensions {
@@ -14,19 +14,14 @@
             return builder.UseMiddleware<FromTwentyToHundredMiddleware>();
         }
     }
-    public static class FromHundredOneToThousandExtensions {
-        public static IApplicationBuilder UseFromHundredOneToThousand(this IApplicationBuilder builder) {
-            return builder.UseMiddleware<FromHundredOneToThousandMiddleware>();
+    public static class FromHundredToThousandExtensions {
+        public static IApplicationBuilder UseFromHundredToThousand(this IApplicationBuilder builder) {
+            return builder.UseMiddleware<FromHundredToThousandMiddleware>();
         }
     }
-    public static class FromThousandOneToTenThousandExtensions {
-        public static IApplicationBuilder UseFromThousandOneToTenThousand(this IApplicationBuilder builder) {
-            return builder.UseMiddleware<FromThousandOneToTenThousandMiddleware>();
-        }
-    }
-    public static class FromTenThousandOneToHundredThousandExtensions {
-        public static IApplicationBuilder UseFromTenThousandOneToHundredThousandExtensions(this IApplicationBuilder builder) {
-            return builder.UseMiddleware<FromTenThousandOneToHundredThousandMiddleware>();
+    public static class FromThousandToHundredThousandExtensions {
+        public static IApplicationBuilder UseFromThousandToHundredThousand(this IApplicationBuilder builder) {
+            return builder.UseMiddleware<FromThousandToHundredThousandMiddleware>();
         }
     }
 }

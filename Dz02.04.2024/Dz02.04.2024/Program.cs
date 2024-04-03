@@ -7,9 +7,8 @@ var app = builder.Build();
 
 app.UseSession();
 
-app.UseFromTenThousandOneToHundredThousandExtensions();
-app.UseFromThousandOneToTenThousand();
-app.UseFromHundredOneToThousand();
+app.UseFromThousandToHundredThousand();
+app.UseFromHundredToThousand();
 app.UseFromTwentyToHundred();
 app.UseFromElevenToNineteen();
 app.UseFromOneToTen();
