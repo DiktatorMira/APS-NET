@@ -1,0 +1,41 @@
+html {
+    margin:0;
+    font-family: 'Sans Serif Collection';
+}
+body {
+    background:#cecece;
+}
+.main{
+    margin:2% auto;
+    width:99%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+}
+.filmplate {
+    margin:1%;
+    width:49.5%;
+    height: 45vh;
+    background:#4d4d4d;
+    border: 3px outset #3f3f3f;
+    border-radius: 7px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.image{
+    width:44%;
+    height:98%;
+    border:2px outset #535353;
+    border-radius:7px;
+}
+.finfo{
+    margin-left:1%;
+    width:55%;
+    color:white;
+    font-size:1.2em;
+    display:flex;
+    flex-direction:column;
+}
+#min{font-size:1em;}

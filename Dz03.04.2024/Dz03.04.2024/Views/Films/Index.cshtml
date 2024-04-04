@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Dz03._04._2024.Models.Films>
+
+<div class="main">
+    @foreach (var film in Model) {
+        <div class="filmplate">
+            <img class="image" src="@film.PosterPath"/>
+            <div class="finfo">
+                <span>@film.Title</span>
+                <span>@film.Director</span>
+                <span>@film.Genre</span>
+                <span>@film.Date.ToShortDateString()</span>
+                <span id="min">@film.Description</span>
+            </div>
+        </div>
+    }
+</div>
