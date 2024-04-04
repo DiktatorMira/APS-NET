@@ -1,0 +1,21 @@
+﻿@model Dz03._04._2024.Models.Films
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3>Вы точно хотите удалить этот фильм?</h3>
+<div class="mplate">
+    <img class="img" src="@Html.DisplayFor(model => model.PosterPath)" />
+    <div class="desc">
+        <span>"@Html.DisplayFor(model => model.Title)"</span>
+        <span>"@Html.DisplayFor(model => model.Director)"</span>
+        <span>"@Html.DisplayFor(model => model.Genre)"</span>
+        <span>@Model.Date.ToShortDateString()</span>
+        <span>"@Html.DisplayFor(model => model.Description)</span>
+        <form class="form" asp-action="Delete">
+            <a asp-action="Index" class="btn">Нет</a> |
+            <input type="hidden" asp-for="Id"/>
+            <input type="submit" value="Да" class="btn"/>
+        </form>
+    </div>
+</div>
