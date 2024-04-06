@@ -1,0 +1,17 @@
+﻿@model Dz03._04._2024.Models.Films
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mplate">
+    <img class="img" src="@Html.DisplayFor(model => model.PosterPath)" />
+    <div class="info">
+        <span>@Html.DisplayFor(model => model.Title)</span>
+        <span>@Html.DisplayFor(model => model.Director)</span>
+        <span>@Html.DisplayFor(model => model.Genre)</span>
+        <span>@Model.Date.ToShortDateString()</span>
+        <span>@Html.DisplayFor(model => model.Description)</span>
+        <a asp-action="Index" class="bot">Венрунться обратно</a>
+    </div>
+</div>

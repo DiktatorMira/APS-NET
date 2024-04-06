@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<a asp-action="Create" class="addbut">Добавить фильм</a>
 <div class="main">
     @foreach (var film in Model) {
         <div class="filmplate">
@@ -16,6 +17,7 @@
                 <div class="bottom">
                     <a asp-action="Details" asp-route-id="@film.Id" class="inbutton">Подробнее</a>
                     <a asp-action="Delete" asp-route-id="@film.Id" class="inbutton">Удалить</a>
+                    <a asp-action="Edit" asp-route-id="@film.Id" class="inbutton">Изменить</a>
                 </div>
             </div>
         </div>

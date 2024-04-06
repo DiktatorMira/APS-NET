@@ -1,0 +1,30 @@
+﻿@model Dz03._04._2024.Models.Films
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Edit" enctype="multipart/form-data" class="mplate">
+    <div class="left">
+        <img class="image" id="previewImage2" src="@Url.Content(Model.PosterPath)" />
+        <input asp-for="PosterPath" class="leftbtn" id="addimg2" type="file" name="uploadedFile" value="Добавить" accept="image/*" />
+    </div>
+    <div class="info">
+        <input asp-for="Title" type="text" class="inputs" placeholder="Название фильма" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+        <input asp-for="Director" type="text" class="inputs" placeholder="Режиссёр" />
+        <span asp-validation-for="Director" class="text-danger"></span>
+        <input asp-for="Genre" type="text" class="inputs" placeholder="Жанр" />
+        <span asp-validation-for="Genre" class="text-danger"></span>
+        <input asp-for="Date" type="date" class="inputs" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+        <textarea asp-for="Description" class="inputs area" placeholder="Описание"></textarea>
+        <div class="botm trd">
+            <a asp-action="Index" class="inbutton">Отмена</a>
+            <input type="submit" value="Сохранить" class="inbutton" />
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
