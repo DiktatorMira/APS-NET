@@ -7,9 +7,13 @@
 <form asp-action="Create" enctype="multipart/form-data" class="mplate">
     <div class="left">
         <img class="image" id="previewImage" />
-        <input asp-for="PosterPath" class="leftbtn" id="addimg" type="file" name="uploadedFile" value="Добавить" accept="image/*" />
+        <label for="addimg" class="leftbtn">
+            <span>Выберите файл</span>
+            <input asp-for="PosterPath" id="addimg" type="file" name="uploadedFile" style="display: none;" accept="image/*" />
+        </label>
     </div>
     <div class="info">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="Title" type="text" class="inputs" placeholder="Название фильма"/>
         <span asp-validation-for="Title" class="text-danger"></span>
         <input asp-for="Director" type="text" class="inputs" placeholder="Режиссёр" />
@@ -19,6 +23,7 @@
         <input asp-for="Date" type="date" class="inputs"/>
         <span asp-validation-for="Date" class="text-danger"></span>
         <textarea asp-for="Description" class="inputs area" placeholder="Описание"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
         <div class="botm trd">
             <a asp-action="Index" class="inbutton">Отмена</a>
             <input type="submit" value="Добавить" class="inbutton" />

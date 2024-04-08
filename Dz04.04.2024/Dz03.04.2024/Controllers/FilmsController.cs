@@ -18,11 +18,13 @@ namespace Dz03._04._2024.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile uploadedFile, [Bind("Id,Title,Director,Genre,Date,PosterPath,Description")] Films film) {
+            if (db.films.Any(f => f.Title == film.Title)) ModelState.AddModelError("Title", "Такое название фильма уже есть!");
             if (ModelState.IsValid && uploadedFile != null) {
                 // Сохранение загруженного файла
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadedFile.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                if (System.IO.File.Exists(filePath)) ModelState.AddModelError("PosterPath", "Файл с таким именем уже существует");
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create)) await uploadedFile.CopyToAsync(fileStream);
                 film.PosterPath = "/Images/" + uniqueFileName; // Путь к сохранённому файлу
@@ -31,17 +33,22 @@ namespace Dz03._04._2024.Controllers {
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(film);
+            else {
+                ModelState.AddModelError("", "Форма не валидная!");
+                return View(film);
+            }
         }
         public async Task<IActionResult> Edit(int? id, IFormFile uploadedFile) {
             if (id == null) return NotFound();
             var film = await db.films.FindAsync(id);
             if (film == null) return NotFound();
+            if (db.films.Any(f => f.Title == film.Title)) ModelState.AddModelError("Title", "Такое название фильма уже есть!");
             if (ModelState.IsValid) {
                 if (uploadedFile != null) {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadedFile.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    if (System.IO.File.Exists(filePath)) ModelState.AddModelError("PosterPath", "Файл с таким именем уже существует");
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create)) await uploadedFile.CopyToAsync(fileStream);
                     film.PosterPath = "/Images/" + uniqueFileName; // Обновляем путь к изображению
@@ -50,7 +57,10 @@ namespace Dz03._04._2024.Controllers {
                 db.SaveChanges(); // Сохраняем все изменения в базе данных
                 return RedirectToAction("Index"); // Редирект на страницу со списком фильмов
             }
-            return View(film); // Если модель не прошла валидацию, возвращаем ту же самую форму с ошибками
+            else {
+                ModelState.AddModelError("", "Форма не валидная!");
+                return View(film);
+            }
         }
         public async Task<IActionResult> Details(int? id) {
             if (id == null) return NotFound();

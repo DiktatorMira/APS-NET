@@ -6,9 +6,9 @@
     text-shadow: 2px 2px 4px rgb(0,0,0,0.7);
 }
 .mplate {
-    margin:5% auto;
+    margin: 5% auto;
     width: 60%;
-    height:80vh;
+    min-height: 80vh;
     background: linear-gradient(to bottom, #4d4d4d, #3c3c3c);
     border: 3px outset #3f3f3f;
     border-radius: 7px;
@@ -58,7 +58,7 @@
 }
 .botm {
     margin: auto;
-    margin-top: 45%;
+    margin-top: auto;
     height: 5vh;
     width: 96%;
     display: flex;
@@ -88,7 +88,7 @@
     border-radius: 7px;
     box-shadow: 2px 2px 6px rgb(0,0,0,0.8);
     text-shadow: 2px 2px 4px rgb(0,0,0,0.7);
-    font-size: 1em;
+    font-size: 1.1em;
     text-align: center;
     text-decoration: none;
     color: white;
@@ -125,3 +125,8 @@ inputs:focus {box-shadow: 4px 4px 8px #1f204c;}
     resize: none;
 }
 .trd{margin-top:30%;}
+.text-danger {
+    margin-top: .5em;
+    font-size: .6em;
+    display: block;
+}
