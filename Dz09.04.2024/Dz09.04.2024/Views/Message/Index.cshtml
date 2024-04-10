@@ -6,13 +6,13 @@
 
 <header class="top">
     @if (Context.Session.GetString("Login") != "Guest") {
-        <h3 class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></h3>
+        <h4 class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></h4>
     } else {
         <h3 class="toptext">Вы в режиме гостя. Чтобы иметь возможность написать, пожалуйста, <a asp-action="ToRegister" class="href">зарегистрируйтесь</a> или <a asp-action="ToLogin" class="href">войдите</a>.</h3>
     }
 </header>
-<secition class="mess">
-    @foreach (var message in Model.Messages) {
+<section class="mess">
+    @foreach (var message in Model.Messages!)  {
         <div class="message">
             <div class="mestop">
                 <p>@message.User?.Login (@message.User?.FullName)</p>
@@ -21,18 +21,19 @@
             <p class="cont">@message.Content</p>
         </div>
     }
-</secition>
+</section>
 <form asp-action="Send" enctype="multipart/form-data" class="sends">
     @if (Context.Session.GetString("Login") != "Guest") {
+        @Html.AntiForgeryToken()
         <div class="formes">
-            <textarea asp-for="MessageModel.Content" class="area" placeholder="Введите сообщение..."></textarea>
-            <span asp-validation-for="MessageModel.Content" class="text-danger"></span>
+            <textarea asp-for="MessageModel!.Content" class="area" placeholder="Введите сообщение..."></textarea>
+            <span asp-validation-for="MessageModel!.Content" class="text-danger"></span>
         </div>
         <input type="submit" value="Отправить" class="btn second" />
     } else {
         <div class="formes">
-            <textarea asp-for="MessageModel.Content" class="area" placeholder="Сначало авторизуйтесь!" readonly></textarea>
-            <span asp-validation-for="MessageModel.Content" class="text-danger"></span>
+            <textarea asp-for="MessageModel!.Content" class="area" placeholder="Сначало авторизуйтесь!" readonly></textarea>
+            <span asp-validation-for="MessageModel!.Content" class="text-danger"></span>
         </div>
         <input type="submit" value="Недоступно" class="btn second" disabled />
     }
