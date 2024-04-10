@@ -1,0 +1,21 @@
+﻿@model Dz09._04._2024.Models.Logon
+@{
+    ViewBag.Title = "Авторизация";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Login" enctype="multipart/form-data" class="logform">
+    <h2>Вход</h2>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="Login" class="inputs" placeholder="Логин" />
+    <span asp-validation-for="Login" class="text-danger"></span>
+    <input asp-for="Password" class="inputs" placeholder="Пароль"/>
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <input type="submit" value="Войти" class="btn"/>
+    <a asp-action="Register" class="href">Нет аккаунта?</a>
+    <a asp-action="Continue" class="href">Продолжить как гость</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

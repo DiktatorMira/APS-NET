@@ -1,0 +1,43 @@
+﻿@model Dz09._04._2024.Models.CombinedMessages
+@{
+    ViewBag.Title = "Главная страница";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="top">
+    @if (Context.Session.GetString("Login") != "Guest") {
+        <h3 class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></h3>
+    } else {
+        <h3 class="toptext">Вы в режиме гостя. Чтобы иметь возможность написать, пожалуйста, <a asp-action="ToRegister" class="href">зарегистрируйтесь</a> или <a asp-action="ToLogin" class="href">войдите</a>.</h3>
+    }
+</header>
+<secition class="mess">
+    @foreach (var message in Model.Messages) {
+        <div class="message">
+            <div class="mestop">
+                <p>@message.User?.Login (@message.User?.FullName)</p>
+                <p>@message.Date.ToString("dd/MM/yyyy-HH:mm:ss")</p>
+            </div>
+            <p class="cont">@message.Content</p>
+        </div>
+    }
+</secition>
+<form asp-action="Send" enctype="multipart/form-data" class="sends">
+    @if (Context.Session.GetString("Login") != "Guest") {
+        <div class="formes">
+            <textarea asp-for="MessageModel.Content" class="area" placeholder="Введите сообщение..."></textarea>
+            <span asp-validation-for="MessageModel.Content" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Отправить" class="btn second" />
+    } else {
+        <div class="formes">
+            <textarea asp-for="MessageModel.Content" class="area" placeholder="Сначало авторизуйтесь!" readonly></textarea>
+            <span asp-validation-for="MessageModel.Content" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Недоступно" class="btn second" disabled />
+    }
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
