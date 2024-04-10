@@ -18,12 +18,12 @@ namespace Dz09._04._2024.Controllers {
             if (ModelState.IsValid)  {
                 var user = await repository.GetUserByLoginAsync(logon.Login!);
                 if (user == null) {
-                    ModelState.AddModelError("Login", "Неверный логин!");
+                    ModelState.AddModelError("Login", "Неверный логин или пароль!");
                     return View(logon);
                 }
                 var hashedPassword = cryprography.HashPassword(logon.Password!, user.Salt!);
                 if (user.Password != hashedPassword) {
-                    ModelState.AddModelError("Password", "Неверный пароль!");
+                    ModelState.AddModelError("Login", "Неверный логин или пароль!");
                     return View(logon);
                 }
                 HttpContext.Session.SetString("Fullname", user.FullName!);
