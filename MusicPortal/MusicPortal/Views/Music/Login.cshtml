@@ -1,0 +1,19 @@
+﻿@model MusicPortal.Models.Logon
+@{
+    ViewBag.Title = "Авторизация";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Login" enctype="multipart/form-data" class="forms log">
+    <h2>Вход</h2>
+    <input asp-for="Login" class="inputs" placeholder="Логин" />
+    <span asp-validation-for="Login" class="text-danger"></span>
+    <input asp-for="Password" class="inputs" placeholder="Пароль" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <input type="submit" value="Войти" class="btn" />
+    <a asp-action="ToRegister" class="href">Нет аккаунта?</a>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

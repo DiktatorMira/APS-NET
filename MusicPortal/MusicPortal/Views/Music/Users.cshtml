@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MusicPortal.Models.User>
+@{
+    ViewBag.Title = "Управление пользователями";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="topbuttons">
+    <a asp-action="Index" class="hrefbtn secnd">Вернуться назад</a>
+    <a asp-action="" class="hrefbtn secnd">Добавить пользователя</a>
+</div>
+<div class="userslist">
+    @foreach (var user in Model) {
+        <div class="userplate">
+            <div class="leftplate">
+                <span>@user.Login (@user.FullName)</span>
+            </div>
+            <div class="rightplate">
+                @if (!user.IsAuthorized && user.Login != "Admin") {
+                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">Авторизовать</a>
+                } else if (user.IsAuthorized && user.Login != "Admin") {
+                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">Деавторизовать</a>
+                } else {
+                    <a asp-action="Authorize" class="hrefbtn thrd disabled">Авторизовать</a>
+                }
+                <a asp-action="" class="hrefbtn thrd">Изменить</a>
+                <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">Удалить</a>
+            </div>
+        </div>
+    }
+</div>

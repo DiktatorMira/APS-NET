@@ -1,0 +1,29 @@
+﻿@model MusicPortal.Models.Song
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<main class="page">
+    <section class="menu">
+        @if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "True") {
+            <p class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></p>
+            <hr class="line"/>
+            <a asp-action="" class="hrefbtn">Добавить песню</a>
+        }
+        else if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "False") {
+            <p class="toptext">@Context.Session.GetString("Login"), вы не авторизованы! <a asp-action="Logout" class="href">Выйти</a></p>
+            <hr class="line" />
+        }
+        else {
+            <p class ="toptext">Вы в режиме администратора. <a asp-action="Logout" class="href">Выйти</a></p>
+            <hr class="line" />
+            <a asp-action="ToUsers" class="hrefbtn">Управление пользователями</a>
+            <a asp-action="" class="hrefbtn">Добавить песню</a>
+            <a asp-action="" class="hrefbtn">Добавить жанр</a>
+            <a asp-action="" class="hrefbtn">Добавить автора</a>
+        }
+    </section>
+    <section class="songs">
+
+    </section>
+</main>
