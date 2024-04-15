@@ -1,0 +1,19 @@
+﻿@model MusicPortal.Models.Genre
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="AddGenre" class="forms mini">
+    <h2>Добавлениие жанра</h2>
+    <input asp-for="Name" class="inputs" placeholder="Название жанра"/>
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="formbot">
+        <a asp-action="ToGenres" class="hrefbtn inbot">Отмена</a>
+        <input type="submit" value="Добавить" class="btn inbot" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

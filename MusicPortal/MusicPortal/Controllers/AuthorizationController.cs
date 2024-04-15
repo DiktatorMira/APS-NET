@@ -4,10 +4,10 @@ using MusicPortal.Services;
 
 namespace MusicPortal.Controllers {
     public class AuthorizationController : Controller {
-        private readonly IRepository repository;
+        private readonly IUsersRepository usersRep;
         private readonly ICryptography cryprography;
-        public AuthorizationController(IRepository rep, ICryptography crypt) {
-            repository = rep;
+        public AuthorizationController(IUsersRepository urep, ICryptography crypt) {
+            usersRep = urep;
             cryprography = crypt;
         }
         public IActionResult Login() { return View("~/Views/Music/Login.cshtml"); }
@@ -15,7 +15,7 @@ namespace MusicPortal.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Logon logon) {
             if (ModelState.IsValid) {
-                var user = await repository.GetUserByLogin(logon.Login!);
+                var user = await usersRep.GetUserByLogin(logon.Login!);
                 if (user == null) {
                     ModelState.AddModelError("Login", "Неверный логин или пароль!");
                     return View("~/Views/Music/Login.cshtml", logon);
@@ -28,7 +28,7 @@ namespace MusicPortal.Controllers {
 
                 HttpContext.Session.SetString("Authorization", user.IsAuthorized.ToString());
                 HttpContext.Session.SetString("Login", user.Login!);
-                return Redirect("/Main/Index");
+                return Redirect("/Music/Index");
             }
             return View("~/Views/Music/Login.cshtml", logon);
         }

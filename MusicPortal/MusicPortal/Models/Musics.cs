@@ -16,12 +16,14 @@ namespace MusicPortal.Models {
     public class Genre {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Поле не должно быть пустым!")]
         public string? Name { get; set; }
         public ICollection<Song>? Songs { get; set; }
     }
     public class Performer {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Поле не должно быть пустым!")]
         public string? FullName { get; set; }
         public ICollection<Song>? Songs { get; set; }
     }

@@ -2,18 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace MusicPortal.Services {
-    public interface IRepository {
-        Task<User> GetUserByLogin(string login);
-        Task<User> GetUserById(int userId);
+    public interface IUsersRepository {
         Task<IEnumerable<User>> GetUsers();
+        Task<User> GetUserById(int userId);
+        Task<User> GetUserByLogin(string login);
         Task AddUser(User user);
         void DeleteUser(User user);
         Task<bool> IsLoginTaken(string login);
         Task SaveDb();
     }
-    public class Repository : IRepository{
+    public class UsersRepository : IUsersRepository {
         private readonly Context db;
-        public Repository(Context context) => db = context;
+        public UsersRepository(Context context) => db = context;
         public async Task<User> GetUserByLogin(string login) {
             return await db.Users.FirstOrDefaultAsync(u => u.Login == login);
         }

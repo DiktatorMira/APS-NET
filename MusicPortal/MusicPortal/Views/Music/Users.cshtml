@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<MusicPortal.Models.User>
 @{
-    ViewBag.Title = "Управление пользователями";
+    ViewBag.Title = "Музыкальный портал";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,9 +8,9 @@
     <a asp-action="Index" class="hrefbtn secnd">Вернуться назад</a>
     <a asp-action="" class="hrefbtn secnd">Добавить пользователя</a>
 </div>
-<div class="userslist">
+<div class="list">
     @foreach (var user in Model) {
-        <div class="userplate">
+        <div class="listplate">
             <div class="leftplate">
                 <span>@user.Login (@user.FullName)</span>
             </div>
@@ -22,7 +22,6 @@
                 } else {
                     <a asp-action="Authorize" class="hrefbtn thrd disabled">Авторизовать</a>
                 }
-                <a asp-action="" class="hrefbtn thrd">Изменить</a>
                 <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">Удалить</a>
             </div>
         </div>

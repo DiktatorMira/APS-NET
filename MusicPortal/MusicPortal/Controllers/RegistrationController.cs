@@ -5,10 +5,10 @@ using MusicPortal.Services;
 
 namespace MusicPortal.Controllers {
     public class RegistrationController : Controller {
-        private readonly IRepository repository;
+        private readonly IUsersRepository usersRep;
         private readonly ICryptography cryptography;
-        public RegistrationController(IRepository rep, ICryptography crypt) {
-            repository = rep;
+        public RegistrationController(IUsersRepository urep, ICryptography crypt) {
+            usersRep = urep;
             cryptography = crypt;
         }
         public IActionResult Register() { return View("~/Views/Music/Register.cshtml"); }
@@ -16,7 +16,7 @@ namespace MusicPortal.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Register reg) {
             if (ModelState.IsValid) {
-                if (await repository.IsLoginTaken(reg.Login!)) {
+                if (await usersRep.IsLoginTaken(reg.Login!)) {
                     ModelState.AddModelError("Login", "Пользователь с таким логином уже существует!");
                     return View("~/Views/Music/Register.cshtml", reg);
                 } else if (reg.Password!.Length < 6) {
@@ -37,12 +37,12 @@ namespace MusicPortal.Controllers {
                     Salt = salt,
                 };
                 if(reg.Login == "Admin") user.IsAuthorized = true;
-                await repository.AddUser(user);
-                await repository.SaveDb();
+                await usersRep.AddUser(user);
+                await usersRep.SaveDb();
 
                 HttpContext.Session.SetString("Authorization", user.IsAuthorized.ToString());
                 HttpContext.Session.SetString("Login", user.Login!);
-                return Redirect("/Main/Index");
+                return Redirect("/Music/Index");
             }
             return View("~/Views/Music/Register.cshtml", reg);
         }

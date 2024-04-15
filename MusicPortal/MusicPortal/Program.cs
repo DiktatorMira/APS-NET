@@ -13,20 +13,17 @@ builder.Services.AddSession(options => {
     options.Cookie.Name = "Session";
 });
 
-builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ICryptography, Cryptography>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<ISongsRepository, SongsRepository>();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment()) {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.UseSession(); // Не забываем использовать сессии
-app.MapControllerRoute(name: "default", pattern: "{controller=Main}/{action=Index}/{id?}");
+app.MapControllerRoute(name: "default", pattern: "{controller=Music}/{action=Index}/{id?}");
 
 app.Run();
