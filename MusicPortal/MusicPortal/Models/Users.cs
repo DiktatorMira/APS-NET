@@ -29,6 +29,6 @@ namespace MusicPortal.Models {
         public string? Password { get; set; }
         public string? Salt { get; set; }
         public bool IsAuthorized { get; set; } = false;
-        public ICollection<Song>? Songs { get; set; }
+        public virtual ICollection<Song>? Songs { get; set; }
     }
 }

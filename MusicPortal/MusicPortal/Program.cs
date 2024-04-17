@@ -4,7 +4,7 @@ using MusicPortal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<Context>(options => options.UseLazyLoadingProxies().UseSqlServer(connection));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();

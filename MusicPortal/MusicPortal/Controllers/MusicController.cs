@@ -11,48 +11,41 @@ namespace MusicPortal.Controllers {
             usersRep = urep;
             songsRep = srep;
         }
-        public IActionResult Index() {
-            if (HttpContext.Session.GetString("Login") != null) return View();
+        public async Task<IActionResult> Index() {
+            if (HttpContext.Session.GetString("Login") != null) return View(await songsRep.GetSongs());
             else return Redirect("/Authorization/Login");
         }
         public IActionResult Logout() {
             HttpContext.Session.Clear();
             return Redirect("/Authorization/Login");
         }
-        // Users.cshtml
-        public async Task<IActionResult> ToUsers() {
-            return View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
+        public async Task<IActionResult> DeleteSong(int songId) {
+            songsRep.DeleteSong(await songsRep.GetSongById(songId));
+            await songsRep.SaveDb();
+            return RedirectToAction("Index");
         }
+        // Users.cshtml
+        public async Task<IActionResult> ToUsers() => View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
         public async Task<IActionResult> Authorize(int userId) {
             var user = await usersRep.GetUserById(userId);
-            if (user != null) {
-                user.IsAuthorized = !user.IsAuthorized;
-                await usersRep.SaveDb();
-            }
+            user.IsAuthorized = !user.IsAuthorized;
+            await usersRep.SaveDb();
             return View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
         }
         public async Task<IActionResult> DeleteUser(int userId) {
-            var user = await usersRep.GetUserById(userId);
-            if (user != null) {
-                usersRep.DeleteUser(user);
-                await usersRep.SaveDb();
-            }
+            usersRep.DeleteUser(await usersRep.GetUserById(userId));
+            await usersRep.SaveDb();
             return View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
         }
         // Genres.cshtml
-        public async Task<IActionResult> ToGenres() {
-            return View("~/Views/Music/Genres.cshtml", await songsRep.GetGenres());
-        }
+        public async Task<IActionResult> ToGenres() => View("~/Views/Music/Genres.cshtml", await songsRep.GetGenres());
         public async Task<IActionResult> DeleteGenre(int genreId) {
-            var genre = await songsRep.GetGenreById(genreId);
-            if (genre != null) {
-                songsRep.DeleteGenre(genre);
-                await songsRep.SaveDb();
-            }
+            songsRep.DeleteGenre(await songsRep.GetGenreById(genreId));
+            await songsRep.SaveDb();
             return View("~/Views/Music/Genres.cshtml", await songsRep.GetGenres());
         }
         // AddGenre.cshtml
-        public IActionResult ToAddGenre() { return View("~/Views/Music/AddGenre.cshtml"); }
+        public IActionResult ToAddGenre() => View("~/Views/Music/AddGenre.cshtml");
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddGenre(Genre model) {
@@ -64,17 +57,12 @@ namespace MusicPortal.Controllers {
             return View("~/Views/Music/AddGenre.cshtml", model);
         }
         //EditGenre.cshtml
-        public async Task<IActionResult> ToEditGenre(int genreId) {
-            var genre = await songsRep.GetGenreById(genreId);
-            if (genre == null) return NotFound();
-            return View("~/Views/Music/EditGenre.cshtml", genre);
-        }
+        public async Task<IActionResult> ToEditGenre(int genreId) => View("~/Views/Music/EditGenre.cshtml", await songsRep.GetGenreById(genreId));
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditGenre(Genre model) {
             if (ModelState.IsValid) {
                 var genre = await songsRep.GetGenreById(model.Id);
-                if (genre == null) return NotFound();
                 genre.Name = model.Name;
                 await songsRep.SaveDb();
                 return RedirectToAction("ToGenres");
@@ -82,19 +70,14 @@ namespace MusicPortal.Controllers {
             return View("~/Views/Music/EditGenre.cshtml", model);
         }
         // Performers.cshtml
-        public async Task<IActionResult> ToPerformers()  {
-            return View("~/Views/Music/Performers.cshtml", await songsRep.GetPerformers());
-        }
+        public async Task<IActionResult> ToPerformers() => View("~/Views/Music/Performers.cshtml", await songsRep.GetPerformers());
         public async Task<IActionResult> DeletePerformer(int performerId) {
-            var performer = await songsRep.GetPerformerById(performerId);
-            if (performer != null) {
-                songsRep.DeletePerformer(performer);
-                await songsRep.SaveDb();
-            }
+            songsRep.DeletePerformer(await songsRep.GetPerformerById(performerId));
+            await songsRep.SaveDb();
             return View("~/Views/Music/Performers.cshtml", await songsRep.GetPerformers());
         }
         // AddPerformer.cshtml
-        public IActionResult ToAddPerformer() { return View("~/Views/Music/AddPerformer.cshtml"); }
+        public IActionResult ToAddPerformer() => View("~/Views/Music/AddPerformer.cshtml");
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPerformer(Performer model) {
@@ -106,22 +89,74 @@ namespace MusicPortal.Controllers {
             return View("~/Views/Music/AddPerformer.cshtml", model);
         }
         // EditPerformer.cshtml
-        public async Task<IActionResult> ToEditPerformer(int performerId) {
-            var performer = await songsRep.GetPerformerById(performerId);
-            if (performer == null) return NotFound();
-            return View("~/Views/Music/EditPerformer.cshtml", performer);
-        }
+        public async Task<IActionResult> ToEditPerformer(int performerId) => View("~/Views/Music/EditPerformer.cshtml", await songsRep.GetPerformerById(performerId));
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPerformer(Performer model) {
             if (ModelState.IsValid) {
                 var performer = await songsRep.GetPerformerById(model.Id);
-                if (performer == null) return NotFound();
                 performer.FullName = model.FullName;
                 await songsRep.SaveDb();
                 return RedirectToAction("ToPerformers");
             }
             return View("~/Views/Music/EditPerformer.cshtml", model);
+        }
+        // AddSong.cshtml
+        public async Task<IActionResult> ToAddSong() {
+            ViewBag.Genres = await songsRep.GetGenres();
+            ViewBag.Performers = await songsRep.GetPerformers();
+            return View("~/Views/Music/AddSong.cshtml"); 
+        }
+        public async Task<IActionResult> AddSong(Song model) {
+            if (ModelState.IsValid && !string.IsNullOrEmpty(HttpContext.Session.GetString("Login"))) {
+
+                var user = await usersRep.GetUserByLogin(HttpContext.Session.GetString("Login")!);
+                var genre = await songsRep.GetGenreByName(model.Genre!.Name!);
+                var performer = await songsRep.GetPerformerByFullName(model.Performer!.FullName!);
+
+                await songsRep.AddSong(new Song {
+                    Title = model.Title,
+                    UserId = user!.Id,
+                    GenreId = genre!.Id,
+                    ArtistId = performer!.Id,
+                    User = user,
+                    Genre = genre,
+                    Performer = performer
+                });
+                await songsRep.SaveDb();
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("Title", "Ошибка добавления песни!");
+            ViewBag.Genres = await songsRep.GetGenres();
+            ViewBag.Performers = await songsRep.GetPerformers();
+            return View("~/Views/Music/AddSong.cshtml", model);
+        }
+        // EditSong.cshtml
+        public async Task<IActionResult> ToEditSong(int songId) {
+            ViewBag.Genres = await songsRep.GetGenres();
+            ViewBag.Performers = await songsRep.GetPerformers();
+            return View("~/Views/Music/EditSong.cshtml", await songsRep.GetSongById(songId));
+        }
+        public async Task<IActionResult> EditSong(Song model) {
+            if (ModelState.IsValid) {
+                var song = await songsRep.GetSongById(model.Id);
+                var genre = await songsRep.GetGenreByName(model.Genre!.Name!);
+                var performer = await songsRep.GetPerformerByFullName(model.Performer!.FullName!);
+
+                song.Title = model.Title;
+                song.GenreId = genre!.Id;
+                song.ArtistId = genre.Id;
+                song.Genre = genre;
+                song.Performer = performer;
+                await songsRep.SaveDb();
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("Title", "Ошибка изменения песни!");
+            ViewBag.Genres = await songsRep.GetGenres();
+            ViewBag.Performers = await songsRep.GetPerformers();
+            return View("~/Views/Music/AddSong.cshtml", model);
         }
     }
 }

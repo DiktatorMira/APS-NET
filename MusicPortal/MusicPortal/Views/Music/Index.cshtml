@@ -1,4 +1,4 @@
-﻿@model MusicPortal.Models.Song
+﻿@model IEnumerable<MusicPortal.Models.Song>
 @{
     ViewBag.Title = "Музыкальный портал";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,7 +8,7 @@
         @if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "True") {
             <p class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></p>
             <hr class="line"/>
-            <a asp-action="" class="hrefbtn">Добавить песню</a>
+            <a asp-action="ToAddSong" class="hrefbtn">Добавить песню</a>
         }
         else if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "False") {
             <p class="toptext">@Context.Session.GetString("Login"), вы не авторизованы! <a asp-action="Logout" class="href">Выйти</a></p>
@@ -18,12 +18,26 @@
             <p class ="toptext">Вы в режиме администратора. <a asp-action="Logout" class="href">Выйти</a></p>
             <hr class="line" />
             <a asp-action="ToUsers" class="hrefbtn">Управление пользователями</a>
-            <a asp-action="" class="hrefbtn">Добавить песню</a>
+            <a asp-action="ToAddSong" class="hrefbtn">Добавить песню</a>
             <a asp-action="ToGenres" class="hrefbtn">Каталог жанров</a>
             <a asp-action="ToPerformers" class="hrefbtn">Каталог исполнителей</a>
         }
     </section>
     <section class="songs">
-
+        @foreach (var song in Model) {
+            <div class="songplate">
+                @if (song.Performer != null && song.Genre != null) {
+                    <span>@song.Title - @song.Performer.FullName | @song.Genre.Name</span>
+                } else {
+                    <span>@song.Title - Неизвестный исполнитель | Неизвестный жанр</span>
+                }
+                <div class="songbut">
+                    @if (Context.Session.GetString("Login") == "Admin") {
+                        <a asp-action="ToEditSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Изменить</a>
+                        <a asp-action="DeleteSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Удалить</a>
+                    } else { }
+                </div>
+            </div>
+        }
     </section>
 </main>

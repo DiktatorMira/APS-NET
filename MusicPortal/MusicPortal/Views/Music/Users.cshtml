@@ -4,10 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="topbuttons">
-    <a asp-action="Index" class="hrefbtn secnd">Вернуться назад</a>
-    <a asp-action="" class="hrefbtn secnd">Добавить пользователя</a>
-</div>
+<a asp-action="Index" class="hrefbtn frth">Вернуться назад</a>
 <div class="list">
     @foreach (var user in Model) {
         <div class="listplate">
