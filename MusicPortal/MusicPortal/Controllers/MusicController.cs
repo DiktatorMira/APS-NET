@@ -2,6 +2,7 @@
 using MusicPortal.Services;
 using Microsoft.AspNetCore.Http;
 using MusicPortal.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicPortal.Controllers {
     public class MusicController : Controller {
@@ -11,8 +12,37 @@ namespace MusicPortal.Controllers {
             usersRep = urep;
             songsRep = srep;
         }
-        public async Task<IActionResult> Index() {
-            if (HttpContext.Session.GetString("Login") != null) return View(await songsRep.GetSongs());
+        public async Task<IActionResult> Index(int genre = 0, int performer = 0, int page = 1,
+            SortState sortOrder = SortState.TitleAsc) {
+            if (HttpContext.Session.GetString("Login") != null) {
+                IQueryable<Song> songs = songsRep.GetQuerySongs();
+                // фильтрация
+                if (genre != 0) songs = songs.Where(s => s.GenreId == genre);
+                if (performer != 0) songs = songs.Where(s => s.ArtistId == performer);
+
+                // сортировка
+                songs = sortOrder switch {
+                    SortState.TitleDesc => songs.OrderByDescending(s => s.Title),
+                    SortState.TitleAsc => songs.OrderBy(s => s.Title),
+                    SortState.GenreDesc => songs.OrderByDescending(s => s.Genre!.Name),
+                    SortState.GenreAsc => songs.OrderBy(s => s.Genre!.Name),
+                    SortState.PerformerDesc => songs.OrderByDescending(s => s.Performer!.FullName),
+                    SortState.PerformerAsc => songs.OrderBy(s => s.Performer!.FullName),
+                    _ => songs.OrderBy(s => s.Title),
+                };
+
+                // пагинация
+                var count = await songs.CountAsync();
+                var items = await songs.Skip((page - 1) * 6).Take(6).ToListAsync();
+
+                // формируем модель представления
+                return View(new IndexVM(
+                    items,
+                    new PageVM(count, page, 6),
+                    new FilterVM(await songsRep.GetGenres(), await songsRep.GetPerformers(), genre, performer),
+                    new SortVM(sortOrder)
+                ));
+            }
             else return Redirect("/Authorization/Login");
         }
         public IActionResult Logout() {

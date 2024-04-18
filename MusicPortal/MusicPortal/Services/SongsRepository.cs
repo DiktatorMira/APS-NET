@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MusicPortal.Services {
     public interface ISongsRepository {
         Task<IEnumerable<Song>> GetSongs();
+        IQueryable<Song> GetQuerySongs();
         Task<IEnumerable<Genre>> GetGenres();
         Task<IEnumerable<Performer>> GetPerformers();
         Task<Song> GetSongById(int songId);
@@ -23,6 +24,7 @@ namespace MusicPortal.Services {
         private readonly Context db;
         public SongsRepository(Context context) => db = context;
         public async Task<IEnumerable<Song>> GetSongs() => await db.Songs.ToListAsync();
+        public IQueryable<Song> GetQuerySongs() => db.Songs;
         public async Task<IEnumerable<Genre>> GetGenres() => await db.Genres.ToListAsync(); 
         public async Task<IEnumerable<Performer>> GetPerformers() => await db.Performers.ToListAsync();
         public async Task<Song> GetSongById(int songId) => await db.Songs.FirstOrDefaultAsync(s => s.Id == songId);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicPortal.Models.Song>
+﻿@model MusicPortal.Models.IndexVM
 @{
     ViewBag.Title = "Музыкальный портал";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,7 +24,31 @@
         }
     </section>
     <section class="songs">
-        @foreach (var song in Model) {
+        <div class="debug">
+            <a class="hrefbtn fif" asp-action="Index" 
+            asp-route-sortOrder="@(Model.SortVM!.TitleSort)" 
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)" 
+            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По названию</a>
+
+            <a class="hrefbtn fif" asp-action="Index"
+            asp-route-sortOrder="@(Model.SortVM!.GenreSort)"
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
+            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По жанрам</a>
+
+            <a class="hrefbtn fif" asp-action="Index"
+            asp-route-sortOrder="@(Model.SortVM!.PerformerSort)"
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
+            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По авторам</a>
+
+            <form class="filtration" method="get">
+                <span>Жанр: </span>
+                <select class="inputs no2" name="genre" asp-items="Model.FilterVM!.Genres"></select>
+                <span>Автор: </span>
+                <select class="inputs no2" name="performer" asp-items="Model.FilterVM!.Performers"></select>
+                <input type="submit" value="Поиск" class="btn no" />
+            </form>
+        </div>
+        @foreach (var song in Model.Songs!) {
             <div class="songplate">
                 @if (song.Performer != null && song.Genre != null) {
                     <span>@song.Title - @song.Performer.FullName | @song.Genre.Name</span>
@@ -39,5 +63,9 @@
                 </div>
             </div>
         }
+        <page-link class="pagextra" page-model="Model.PageVM" page-action="Index"
+                   page-url-genre="@(Model.FilterVM!.SelectedGenre)"
+                   page-url-performer="@(Model.FilterVM.SelectedPerformer)"
+                   page-url-sortorder="@(Model.SortVM!.Current)"></page-link>
     </section>
 </main>
