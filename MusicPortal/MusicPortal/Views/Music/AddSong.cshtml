@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-action="AddSong" class="forms log">
+<form asp-action="AddSong" enctype="multipart/form-data" class="forms song">
     <h2>Добавлениие песни</h2>
     <input asp-for="Title" class="inputs" placeholder="Название песни"/>
     <span asp-validation-for="Title" class="text-danger"></span>
@@ -18,6 +18,8 @@
             <option value="@performer.FullName">@performer.FullName</option>
         }
     </select>
+    <input class="btn file" asp-for="Path" type="file" name="uploadedFile" accept="audio/*" />
+    <span asp-validation-for="Path" class="text-danger"></span>
     <div class="formbot">
         <a asp-action="Index" class="hrefbtn inbot">Отмена</a>
         <input type="submit" value="Добавить" class="btn inbot"/>

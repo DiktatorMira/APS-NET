@@ -28,6 +28,7 @@
 }
 .reg { height: 80vh; }
 .log { height: 60vh; }
+.song { height:65vh;}
 h2 {
     margin-top: 5%;
     color: #464646;
@@ -61,6 +62,7 @@ h2 {
 .btn:hover { box-shadow: 3px 3px 6px rgb(0,0,0,0.5); }
 .btn:active { transform: scale(0.98); }
 .btn:disabled { background: #8b8b8b; }
+.file{width:90%;}
 .href {
     margin-top: 3%;
     font-size: 1.1em;
@@ -198,6 +200,7 @@ h2 {
 }
 .page-link:hover {box-shadow: 0px 2px 6px rgb(0,0,0,0.7);}
 .page-link:active{transform:scale(0.9);}
+.audio{width:35%;}
 
 /* Users.cshtml è Genres.cshtml */
 

@@ -55,6 +55,10 @@
                 } else {
                     <span>@song.Title - Неизвестный исполнитель | Неизвестный жанр</span>
                 }
+                <audio controls class="audio">
+                    <source src="@song.Path" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудио элемент.
+                </audio>
                 <div class="songbut">
                     @if (Context.Session.GetString("Login") == "Admin") {
                         <a asp-action="ToEditSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Изменить</a>

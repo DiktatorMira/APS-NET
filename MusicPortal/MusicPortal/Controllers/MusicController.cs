@@ -3,19 +3,22 @@ using MusicPortal.Services;
 using Microsoft.AspNetCore.Http;
 using MusicPortal.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MusicPortal.Controllers {
     public class MusicController : Controller {
         private readonly IUsersRepository usersRep;
         private readonly ISongsRepository songsRep;
-        public MusicController(IUsersRepository urep, ISongsRepository srep) {
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public MusicController(IUsersRepository urep, ISongsRepository srep, IWebHostEnvironment host) {
             usersRep = urep;
             songsRep = srep;
+            webHostEnvironment = host;
         }
         public async Task<IActionResult> Index(int genre = 0, int performer = 0, int page = 1,
             SortState sortOrder = SortState.TitleAsc) {
             if (HttpContext.Session.GetString("Login") != null) {
-                IQueryable<Song> songs = songsRep.GetQuerySongs();
+                IQueryable<Song> songs = songsRep.GetQuerySongs().Include(s => s.Genre).Include(s => s.Performer);
                 // фильтрация
                 if (genre != 0) songs = songs.Where(s => s.GenreId == genre);
                 if (performer != 0) songs = songs.Where(s => s.ArtistId == performer);
@@ -50,7 +53,10 @@ namespace MusicPortal.Controllers {
             return Redirect("/Authorization/Login");
         }
         public async Task<IActionResult> DeleteSong(int songId) {
-            songsRep.DeleteSong(await songsRep.GetSongById(songId));
+            var song = await songsRep.GetSongById(songId);
+            string oldFilePath = Path.Combine(webHostEnvironment.WebRootPath, song.Path!.TrimStart('/'));
+            System.IO.File.Delete(oldFilePath);
+            songsRep.DeleteSong(song);
             await songsRep.SaveDb();
             return RedirectToAction("Index");
         }
@@ -137,27 +143,34 @@ namespace MusicPortal.Controllers {
             ViewBag.Performers = await songsRep.GetPerformers();
             return View("~/Views/Music/AddSong.cshtml"); 
         }
-        public async Task<IActionResult> AddSong(Song model) {
+        public async Task<IActionResult> AddSong(IFormFile uploadedFile, Song model) {
             if (ModelState.IsValid && !string.IsNullOrEmpty(HttpContext.Session.GetString("Login"))) {
+                if(uploadedFile == null)  ModelState.AddModelError("Path", "Выберите файл!");
+                else {
+                    string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "musics");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadedFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    if (System.IO.File.Exists(filePath)) ModelState.AddModelError("Path", "Файл с таким именем уже существует");
+                    using (var fileStream = new FileStream(filePath, FileMode.Create)) await uploadedFile.CopyToAsync(fileStream);
 
-                var user = await usersRep.GetUserByLogin(HttpContext.Session.GetString("Login")!);
-                var genre = await songsRep.GetGenreByName(model.Genre!.Name!);
-                var performer = await songsRep.GetPerformerByFullName(model.Performer!.FullName!);
+                    var user = await usersRep.GetUserByLogin(HttpContext.Session.GetString("Login")!);
+                    var genre = await songsRep.GetGenreByName(model.Genre!.Name!);
+                    var performer = await songsRep.GetPerformerByFullName(model.Performer!.FullName!);
 
-                await songsRep.AddSong(new Song {
-                    Title = model.Title,
-                    UserId = user!.Id,
-                    GenreId = genre!.Id,
-                    ArtistId = performer!.Id,
-                    User = user,
-                    Genre = genre,
-                    Performer = performer
-                });
-                await songsRep.SaveDb();
-                return RedirectToAction("Index");
+                    await songsRep.AddSong(new Song {
+                        Title = model.Title,
+                        Path = "/musics/" + uniqueFileName,
+                        UserId = user!.Id,
+                        GenreId = genre!.Id,
+                        ArtistId = performer!.Id,
+                        User = user,
+                        Genre = genre,
+                        Performer = performer
+                    });
+                    await songsRep.SaveDb();
+                    return RedirectToAction("Index");
+                }
             }
-
-            ModelState.AddModelError("Title", "Ошибка добавления песни!");
             ViewBag.Genres = await songsRep.GetGenres();
             ViewBag.Performers = await songsRep.GetPerformers();
             return View("~/Views/Music/AddSong.cshtml", model);
@@ -168,7 +181,7 @@ namespace MusicPortal.Controllers {
             ViewBag.Performers = await songsRep.GetPerformers();
             return View("~/Views/Music/EditSong.cshtml", await songsRep.GetSongById(songId));
         }
-        public async Task<IActionResult> EditSong(Song model) {
+        public async Task<IActionResult> EditSong(IFormFile uploadedFile, Song model) {
             if (ModelState.IsValid) {
                 var song = await songsRep.GetSongById(model.Id);
                 var genre = await songsRep.GetGenreByName(model.Genre!.Name!);
@@ -179,14 +192,25 @@ namespace MusicPortal.Controllers {
                 song.ArtistId = genre.Id;
                 song.Genre = genre;
                 song.Performer = performer;
+
+                if (uploadedFile != null) {
+                    string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "musics");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadedFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create)) await uploadedFile.CopyToAsync(fileStream);
+
+                    string oldFilePath = Path.Combine(webHostEnvironment.WebRootPath, song.Path!.TrimStart('/'));
+                    System.IO.File.Delete(oldFilePath);
+
+                    song.Path = "/musics/" + uniqueFileName;
+                } else song.Path = song.Path;
                 await songsRep.SaveDb();
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("Title", "Ошибка изменения песни!");
             ViewBag.Genres = await songsRep.GetGenres();
             ViewBag.Performers = await songsRep.GetPerformers();
-            return View("~/Views/Music/AddSong.cshtml", model);
+            return View("~/Views/Music/EditSong.cshtml", model);
         }
     }
 }
