@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MusicPortal.BLL.Services;
+using MusicPortal.BLL.DTO;
 using MusicPortal.Models;
 using MusicPortal.Services;
 
 namespace MusicPortal.Controllers {
     public class RegistrationController : Controller {
-        private readonly IUsersRepository usersRep;
-        private readonly ICryptography cryptography;
-        public RegistrationController(IUsersRepository urep, ICryptography crypt) {
+        private readonly IUserService usersRep;
+        private readonly ICryptographyService cryptography;
+        public RegistrationController(IUserService urep, ICryptographyService crypt) {
             usersRep = urep;
             cryptography = crypt;
         }
@@ -30,7 +31,7 @@ namespace MusicPortal.Controllers {
                 string salt = cryptography.GenerateSalt();
                 string hashedPassword = cryptography.HashPassword(reg.Password, salt);
 
-                var user = new User {
+                var user = new UserDTO {
                     Login = reg.Login,
                     FullName = reg.FullName,
                     Password = hashedPassword,
@@ -38,7 +39,7 @@ namespace MusicPortal.Controllers {
                 };
                 if(reg.Login == "Admin") user.IsAuthorized = true;
                 await usersRep.AddUser(user);
-                await usersRep.SaveDb();
+                await usersRep.Save();
 
                 HttpContext.Session.SetString("Authorization", user.IsAuthorized.ToString());
                 HttpContext.Session.SetString("Login", user.Login!);

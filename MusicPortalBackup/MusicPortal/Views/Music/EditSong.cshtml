@@ -1,0 +1,33 @@
+﻿@model MusicPortal.Models.Song
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="EditSong" enctype="multipart/form-data" class="forms song">
+    <input type="hidden" asp-for="Id" />
+    <h2>Изменение песни</h2>
+    <input asp-for="Title" class="inputs" placeholder="Название песни" value="@Model.Title" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+    <select asp-for="Genre!.Name" class="inputs" value="@Model.Genre!.Name">
+        @foreach (var genre in ViewBag.Genres) {
+            <option value="@genre.Name">@genre.Name</option>
+        }
+    </select>
+    <select asp-for="Performer!.FullName" class="inputs" value="@Model.Performer!.FullName">
+        @foreach (var performer in ViewBag.Performers) {
+            <option value="@performer.FullName">@performer.FullName</option>
+        }
+    </select>
+    <input type="hidden" asp-for="Path" value="@Model.Path" />
+    <input class="btn file" asp-for="Path" type="file" name="uploadedFile" accept="audio/*" />
+    <span asp-validation-for="Path" class="text-danger"></span>
+    <div class="formbot">
+        <a asp-action="Index" class="hrefbtn inbot">Отмена</a>
+        <input type="submit" value="Изменить" class="btn inbot" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

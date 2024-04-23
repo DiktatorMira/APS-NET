@@ -1,21 +1,27 @@
 using Microsoft.EntityFrameworkCore;
-using MusicPortal.Models;
+using MusicPortal.BLL;
+using MusicPortal.BLL.Services;
 using MusicPortal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<Context>(options => options.UseLazyLoadingProxies().UseSqlServer(connection));
+builder.Services.AddContext(connection!);
+builder.Services.AddSaveUnitService();
+
+builder.Services.AddScoped<ICryptographyService, CryptographyService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISongService, SongService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IPerformerService, PerformerService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.Name = "Session";
 });
-
-builder.Services.AddScoped<ICryptography, Cryptography>();
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
-builder.Services.AddScoped<ISongsRepository, SongsRepository>();
 
 var app = builder.Build();
 

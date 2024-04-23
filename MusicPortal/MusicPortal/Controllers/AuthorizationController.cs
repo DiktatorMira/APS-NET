@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicPortal.BLL.Services;
 using MusicPortal.Models;
 using MusicPortal.Services;
 
 namespace MusicPortal.Controllers {
     public class AuthorizationController : Controller {
-        private readonly IUsersRepository usersRep;
-        private readonly ICryptography cryprography;
-        public AuthorizationController(IUsersRepository urep, ICryptography crypt) {
+        private readonly IUserService usersRep;
+        private readonly ICryptographyService cryprography;
+        public AuthorizationController(IUserService urep, ICryptographyService crypt) {
             usersRep = urep;
             cryprography = crypt;
         }
@@ -25,7 +26,6 @@ namespace MusicPortal.Controllers {
                     ModelState.AddModelError("Login", "Неверный логин или пароль!");
                     return View("~/Views/Music/Login.cshtml", logon);
                 }
-
                 HttpContext.Session.SetString("Authorization", user.IsAuthorized.ToString());
                 HttpContext.Session.SetString("Login", user.Login!);
                 return Redirect("/Music/Index");

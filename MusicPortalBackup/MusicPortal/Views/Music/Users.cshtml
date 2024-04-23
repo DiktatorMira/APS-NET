@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MusicPortal.Models.User>
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<a asp-action="Index" class="hrefbtn frth">Вернуться назад</a>
+<div class="list">
+    @foreach (var user in Model) {
+        <div class="listplate">
+            <div class="leftplate">
+                <span>@user.Login (@user.FullName)</span>
+            </div>
+            <div class="rightplate">
+                @if (!user.IsAuthorized && user.Login != "Admin") {
+                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">Авторизовать</a>
+                } else if (user.IsAuthorized && user.Login != "Admin") {
+                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">Деавторизовать</a>
+                } else {
+                    <a asp-action="Authorize" class="hrefbtn thrd disabled">Авторизовать</a>
+                }
+                <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">Удалить</a>
+            </div>
+        </div>
+    }
+</div>

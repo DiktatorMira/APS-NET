@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MusicPortal.Models.Performer>
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="topbuttons">
+    <a asp-action="Index" class="hrefbtn secnd">Вернуться назад</a>
+    <a asp-action="ToAddPerformer" class="hrefbtn secnd">Добавить исполнителя</a>
+</div>
+<div class="list">
+    @foreach (var performer in Model) {
+        <div class="listplate">
+            <div class="leftplate">
+                <span class="biggerfont">@performer.FullName</span>
+            </div>
+            <div class="rightplate">
+                <a asp-action="ToEditPerformer" asp-route-performerId="@performer.Id" class="hrefbtn thrd">Изменить</a>
+                <a asp-action="DeletePerformer" asp-route-performerId="@performer.Id" class="hrefbtn thrd">Удалить</a>
+            </div>
+        </div>
+    }
+</div>

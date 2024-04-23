@@ -1,4 +1,4 @@
-﻿@model MusicPortal.Models.Song
+﻿@model MusicPortal.BLL.DTO.SongDTO
 @{
     ViewBag.Title = "Музыкальный портал";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,12 +9,12 @@
     <h2>Изменение песни</h2>
     <input asp-for="Title" class="inputs" placeholder="Название песни" value="@Model.Title" />
     <span asp-validation-for="Title" class="text-danger"></span>
-    <select asp-for="Genre!.Name" class="inputs" value="@Model.Genre!.Name">
+    <select asp-for="Genre" class="inputs" value="@Model.Genre">
         @foreach (var genre in ViewBag.Genres) {
             <option value="@genre.Name">@genre.Name</option>
         }
     </select>
-    <select asp-for="Performer!.FullName" class="inputs" value="@Model.Performer!.FullName">
+    <select asp-for="Performer" class="inputs" value="@Model.Performer">
         @foreach (var performer in ViewBag.Performers) {
             <option value="@performer.FullName">@performer.FullName</option>
         }

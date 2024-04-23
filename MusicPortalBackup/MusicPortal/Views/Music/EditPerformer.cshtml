@@ -1,0 +1,20 @@
+﻿@model MusicPortal.Models.Performer
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="EditPerformer" class="forms mini">
+    <input type="hidden" asp-for="Id" />
+    <h2>Изменение жанра</h2>
+    <input asp-for="FullName" class="inputs" placeholder="ФИО исполнителя" value="@Model.FullName" />
+    <span asp-validation-for="FullName" class="text-danger"></span>
+    <div class="formbot">
+        <a asp-action="ToPerformers" class="hrefbtn inbot">Отмена</a>
+        <input type="submit" value="Изменить" class="btn inbot" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

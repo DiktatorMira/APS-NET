@@ -1,0 +1,75 @@
+﻿@model MusicPortal.Models.IndexVM
+@{
+    ViewBag.Title = "Музыкальный портал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<main class="page">
+    <section class="menu">
+        @if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "True") {
+            <p class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></p>
+            <hr class="line"/>
+            <a asp-action="ToAddSong" class="hrefbtn">Добавить песню</a>
+        }
+        else if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "False") {
+            <p class="toptext">@Context.Session.GetString("Login"), вы не авторизованы! <a asp-action="Logout" class="href">Выйти</a></p>
+            <hr class="line" />
+        }
+        else {
+            <p class ="toptext">Вы в режиме администратора. <a asp-action="Logout" class="href">Выйти</a></p>
+            <hr class="line" />
+            <a asp-action="ToUsers" class="hrefbtn">Управление пользователями</a>
+            <a asp-action="ToAddSong" class="hrefbtn">Добавить песню</a>
+            <a asp-action="ToGenres" class="hrefbtn">Каталог жанров</a>
+            <a asp-action="ToPerformers" class="hrefbtn">Каталог исполнителей</a>
+        }
+    </section>
+    <section class="songs">
+        <div class="debug">
+            <a class="hrefbtn fif" asp-action="Index" 
+            asp-route-sortOrder="@(Model.SortVM!.TitleSort)" 
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)" 
+            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По названию</a>
+
+            <a class="hrefbtn fif" asp-action="Index"
+            asp-route-sortOrder="@(Model.SortVM!.GenreSort)"
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
+            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По жанрам</a>
+
+            <a class="hrefbtn fif" asp-action="Index"
+            asp-route-sortOrder="@(Model.SortVM!.PerformerSort)"
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
+            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По авторам</a>
+
+            <form class="filtration" method="get">
+                <span>Жанр: </span>
+                <select class="inputs no2" name="genre" asp-items="Model.FilterVM!.Genres"></select>
+                <span>Автор: </span>
+                <select class="inputs no2" name="performer" asp-items="Model.FilterVM!.Performers"></select>
+                <input type="submit" value="Поиск" class="btn no" />
+            </form>
+        </div>
+        @foreach (var song in Model.Songs!) {
+            <div class="songplate">
+                @if (song.Performer != null && song.Genre != null) {
+                    <span>@song.Title - @song.Performer.FullName | @song.Genre.Name</span>
+                } else {
+                    <span>@song.Title - Неизвестный исполнитель | Неизвестный жанр</span>
+                }
+                <audio controls class="audio">
+                    <source src="@song.Path" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудио элемент.
+                </audio>
+                <div class="songbut">
+                    @if (Context.Session.GetString("Login") == "Admin") {
+                        <a asp-action="ToEditSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Изменить</a>
+                        <a asp-action="DeleteSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Удалить</a>
+                    } else { }
+                </div>
+            </div>
+        }
+        <page-link class="pagextra" page-model="Model.PageVM" page-action="Index"
+                   page-url-genre="@(Model.FilterVM!.SelectedGenre)"
+                   page-url-performer="@(Model.FilterVM.SelectedPerformer)"
+                   page-url-sortorder="@(Model.SortVM!.Current)"></page-link>
+    </section>
+</main>
