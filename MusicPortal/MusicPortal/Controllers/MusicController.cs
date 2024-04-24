@@ -59,7 +59,7 @@ namespace MusicPortal.Controllers {
             var song = await songsRep.GetSongById(songId);
             string oldFilePath = Path.Combine(webHostEnvironment.WebRootPath, song.Path!.TrimStart('/'));
             System.IO.File.Delete(oldFilePath);
-            songsRep.DeleteSong(song);
+            await songsRep.DeleteSong(songId);
             return RedirectToAction("Index");
         }
         // Users.cshtml
@@ -67,18 +67,19 @@ namespace MusicPortal.Controllers {
         public async Task<IActionResult> Authorize(int userId) {
             var user = await usersRep.GetUserById(userId);
             user.IsAuthorized = !user.IsAuthorized;
+            usersRep.UpdateUser(user);
             await usersRep.Save();
             return View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
         }
         public async Task<IActionResult> DeleteUser(int userId) {
-            usersRep.DeleteUser(await usersRep.GetUserById(userId));
-            await usersRep.Save();
+            usersRep?.DeleteUser(userId);
+            await usersRep!.Save();
             return View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
         }
         // Genres.cshtml
         public async Task<IActionResult> ToGenres() => View("~/Views/Music/Genres.cshtml", await genreRep.GetGenres());
         public async Task<IActionResult> DeleteGenre(int genreId) {
-            genreRep.DeleteGenre(await genreRep.GetGenreById(genreId));
+            await genreRep.DeleteGenre(genreId);
             await genreRep.Save();
             return View("~/Views/Music/Genres.cshtml", await genreRep.GetGenres());
         }
@@ -100,8 +101,7 @@ namespace MusicPortal.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditGenre(GenreDTO model) {
             if (ModelState.IsValid) {
-                var genre = await genreRep.GetGenreById(model.Id);
-                genre.Name = model.Name;
+                genreRep.UpdateGenre(model);
                 await genreRep.Save();
                 return RedirectToAction("ToGenres");
             }
@@ -110,7 +110,7 @@ namespace MusicPortal.Controllers {
         // Performers.cshtml
         public async Task<IActionResult> ToPerformers() => View("~/Views/Music/Performers.cshtml", await performerRep.GetPerformers());
         public async Task<IActionResult> DeletePerformer(int performerId) {
-            performerRep.DeletePerformer(await performerRep.GetPerformerById(performerId));
+            await performerRep.DeletePerformer(performerId);
             await performerRep.Save();
             return View("~/Views/Music/Performers.cshtml", await performerRep.GetPerformers());
         }
@@ -132,8 +132,7 @@ namespace MusicPortal.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPerformer(PerformerDTO model) {
             if (ModelState.IsValid) {
-                var performer = await performerRep.GetPerformerById(model.Id);
-                performer.FullName = model.FullName;
+                performerRep.UpdatePerformer(model);
                 await performerRep.Save();
                 return RedirectToAction("ToPerformers");
             }
@@ -192,6 +191,8 @@ namespace MusicPortal.Controllers {
                 song.Title = model.Title;
                 song.GenreId = genre!.Id;
                 song.ArtistId = genre.Id;
+                song.Genre = genre.Name;
+                song.Performer = performer.FullName;
 
                 if (uploadedFile != null) {
                     string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "musics");
@@ -204,6 +205,8 @@ namespace MusicPortal.Controllers {
 
                     song.Path = "/musics/" + uniqueFileName;
                 } else song.Path = song.Path;
+
+                songsRep.UpdateSong(song);
                 await songsRep.Save();
                 return RedirectToAction("Index");
             }

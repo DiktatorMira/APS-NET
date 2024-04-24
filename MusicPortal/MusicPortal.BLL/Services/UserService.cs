@@ -10,7 +10,8 @@ namespace MusicPortal.BLL.Services {
         Task<UserDTO> GetUserByLogin(string login);
         Task<bool> IsLoginTaken(string login);
         Task AddUser(UserDTO model);
-        Task DeleteUser(UserDTO model);
+        void UpdateUser(UserDTO model);
+        Task DeleteUser(int userId);
         Task Save();
     }
     public class UserService : IUserService {
@@ -52,9 +53,20 @@ namespace MusicPortal.BLL.Services {
                 FullName = model.FullName,
                 Password = model.Password,
                 Salt = model.Salt,
+                IsAuthorized = model.IsAuthorized
             });
         }
-        public async Task DeleteUser(UserDTO model) => db.Users.Delete(await db.Users.GetById(model.Id));
+        public void UpdateUser(UserDTO model) {
+            db.Users.Update(new User {
+                Id = model.Id,
+                Login = model.Login,
+                FullName = model.FullName,
+                Password = model.Password,
+                Salt = model.Salt,
+                IsAuthorized = model.IsAuthorized
+            });
+        }
+        public async Task DeleteUser(int userId) => await db.Users.Delete(userId);
         public async Task Save() => await db.Save();
     }
 }

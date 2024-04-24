@@ -11,6 +11,7 @@ namespace MusicPortal.DAL.Repositories {
         public async Task<Performer> GetByStr(string fullName) => await db.Performers.FirstOrDefaultAsync(p => p.FullName == fullName);
         public async Task<bool> IsStr(string fullName) => await db.Performers.AnyAsync(p => p.FullName == fullName);
         public async Task Add(Performer performer) => await db.Performers.AddAsync(performer);
-        public void Delete(Performer performer) => db.Performers.Remove(performer);
+        public void Update(Performer performer) => db.Entry(performer).State = EntityState.Modified;
+        public async Task Delete(int performerId) => db.Performers.Remove(await db.Performers.FindAsync(performerId));
     }
 }

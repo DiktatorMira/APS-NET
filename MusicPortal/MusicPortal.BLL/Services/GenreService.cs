@@ -9,7 +9,8 @@ namespace MusicPortal.BLL.Services {
         Task<GenreDTO> GetGenreById(int genreId);
         Task<GenreDTO> GetGenreByName(string name);
         Task AddGenre(GenreDTO model);
-        Task DeleteGenre(GenreDTO model);
+        void UpdateGenre(GenreDTO model);
+        Task DeleteGenre(int genreId);
         Task Save();
     }
     public class GenreService : IGenreService {
@@ -41,7 +42,13 @@ namespace MusicPortal.BLL.Services {
                 Name = model.Name,
             });
         }
-        public async Task DeleteGenre(GenreDTO model) => db.Genres.Delete(await db.Genres.GetById(model.Id));
+        public void UpdateGenre(GenreDTO model) {
+            db.Genres.Update(new Genre {
+                Id = model.Id,
+                Name = model.Name
+            });
+        }
+        public async Task DeleteGenre(int genreId) => await db.Genres.Delete(genreId);
         public async Task Save() => await db.Save();
     }
 }

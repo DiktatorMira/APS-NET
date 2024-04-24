@@ -9,7 +9,8 @@ namespace MusicPortal.BLL.Services {
         Task<PerformerDTO> GetPerformerById(int performerId);
         Task<PerformerDTO> GetPerformerByFullName(string fullname);
         Task AddPerformer(PerformerDTO model);
-        Task DeletePerformer(PerformerDTO model);
+        void UpdatePerformer(PerformerDTO model);
+        Task DeletePerformer(int performerId);
         Task Save();
     }
     public class PerformerService : IPerformerService {
@@ -41,7 +42,13 @@ namespace MusicPortal.BLL.Services {
                 FullName = model.FullName,
             });
         }
-        public async Task DeletePerformer(PerformerDTO model) => db.Performers.Delete(await db.Performers.GetById(model.Id));
+        public void UpdatePerformer(PerformerDTO model) {
+            db.Performers.Update(new Performer {
+                Id = model.Id,
+                FullName = model.FullName
+            });
+        }
+        public async Task DeletePerformer(int performerId) => await db.Performers.Delete(performerId);
         public async Task Save() => await db.Save();
     }
 }

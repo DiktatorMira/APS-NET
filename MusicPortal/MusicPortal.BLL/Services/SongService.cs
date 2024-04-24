@@ -9,7 +9,8 @@ namespace MusicPortal.BLL.Services {
         Task<IEnumerable<SongDTO>> GetSongs();
         Task<SongDTO> GetSongById(int songId);
         Task AddSong(SongDTO model);
-        Task DeleteSong(SongDTO model);
+        void UpdateSong(SongDTO model);
+        Task DeleteSong(int songId);
         Task Save();
     }
     public class SongService : ISongService {
@@ -46,7 +47,17 @@ namespace MusicPortal.BLL.Services {
                 ArtistId = model.ArtistId
             });
         }
-        public async Task DeleteSong(SongDTO model) => db.Songs.Delete(await db.Songs.GetById(model.Id));
+        public void UpdateSong(SongDTO model) {
+            db.Songs.Update(new Song {
+                Id = model.Id,
+                Title = model.Title,
+                Path = model.Path,
+                UserId = model.UserId,
+                GenreId = model.GenreId,
+                ArtistId = model.ArtistId,
+            });
+        }
+        public async Task DeleteSong(int songId) => await db.Songs.Delete(songId);
         public async Task Save() => await db.Save();
     }
 }

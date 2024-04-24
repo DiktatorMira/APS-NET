@@ -11,6 +11,7 @@ namespace MusicPortal.DAL.Repositories {
         public async Task<Genre> GetByStr(string name) => await db.Genres.FirstOrDefaultAsync(g => g.Name == name);
         public async Task<bool> IsStr(string name) => await db.Genres.AnyAsync(g => g.Name == name);
         public async Task Add(Genre genre) => await db.Genres.AddAsync(genre);
-        public void Delete(Genre genre) => db.Genres.Remove(genre);
+        public void Update(Genre genre) => db.Entry(genre).State = EntityState.Modified;
+        public async Task Delete(int genreId) => db.Genres.Remove(await db.Genres.FindAsync(genreId));
     }
 }

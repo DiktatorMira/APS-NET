@@ -7,7 +7,8 @@ namespace MusicPortal.DAL.Repositories {
         Task<T> GetByStr(string value);
         Task<bool> IsStr(string value);
         Task Add(T item);
-        void Delete(T item);
+        void Update(T item);
+        Task Delete(int id);
     }
     public interface ISaveUnit {
         IRepository<User> Users { get; }
