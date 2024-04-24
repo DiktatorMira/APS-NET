@@ -50,11 +50,7 @@
         </div>
         @foreach (var song in Model.Songs!) {
             <div class="songplate">
-                @if (song.Performer != null && song.Genre != null) {
-                    <span>@song.Title - @song.Performer | @song.Genre</span>
-                } else {
-                    <span>@song.Title - Неизвестный исполнитель | Неизвестный жанр</span>
-                }
+                <span>@song.Title - @song.Performer | @song.Genre</span>
                 <audio controls class="audio">
                     <source src="@song.Path" type="audio/mpeg">
                     Ваш браузер не поддерживает аудио элемент.

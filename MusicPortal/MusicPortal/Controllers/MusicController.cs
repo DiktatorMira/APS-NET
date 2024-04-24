@@ -21,27 +21,25 @@ namespace MusicPortal.Controllers {
         public async Task<IActionResult> Index(int genre = 0, int performer = 0, int page = 1,
             SortState sortOrder = SortState.TitleAsc) {
             if (HttpContext.Session.GetString("Login") != null) {
-                var songs = songsRep.GetQuerySongs();
+                var songs = await songsRep.GetSongs();
                 // фильтрация
                 if (genre != 0) songs = songs.Where(s => s.GenreId == genre);
                 if (performer != 0) songs = songs.Where(s => s.ArtistId == performer);
 
-                // загрузка данных в память и выполнение сортировки
-                var sortedSongs = await songs.ToListAsync();
 
-                sortedSongs = sortOrder switch {
-                    SortState.TitleDesc => sortedSongs.OrderByDescending(s => s.Title).ToList(),
-                    SortState.TitleAsc => sortedSongs.OrderBy(s => s.Title).ToList(),
-                    SortState.GenreDesc => sortedSongs.OrderByDescending(s => s.Genre).ToList(),
-                    SortState.GenreAsc => sortedSongs.OrderBy(s => s.Genre).ToList(),
-                    SortState.PerformerDesc => sortedSongs.OrderByDescending(s => s.Performer).ToList(),
-                    SortState.PerformerAsc => sortedSongs.OrderBy(s => s.Performer).ToList(),
-                    _ => sortedSongs.OrderBy(s => s.Title).ToList(),
+                songs = sortOrder switch {
+                    SortState.TitleDesc => songs.OrderByDescending(s => s.Title).ToList(),
+                    SortState.TitleAsc => songs.OrderBy(s => s.Title).ToList(),
+                    SortState.GenreDesc => songs.OrderByDescending(s => s.Genre).ToList(),
+                    SortState.GenreAsc => songs.OrderBy(s => s.Genre).ToList(),
+                    SortState.PerformerDesc => songs.OrderByDescending(s => s.Performer).ToList(),
+                    SortState.PerformerAsc => songs.OrderBy(s => s.Performer).ToList(),
+                    _ => songs.OrderBy(s => s.Title).ToList(),
                 };
 
                 // пагинация
-                var count = sortedSongs.Count();
-                var items = sortedSongs.Skip((page - 1) * 6).Take(6);
+                var count = songs.Count();
+                var items = songs.Skip((page - 1) * 6).Take(6);
 
                 // формируем модель представления
                 return View(new IndexVM(
@@ -166,7 +164,10 @@ namespace MusicPortal.Controllers {
                         Path = "/musics/" + uniqueFileName,
                         UserId = user!.Id,
                         GenreId = genre!.Id,
-                        ArtistId = performer!.Id
+                        ArtistId = performer!.Id,
+                        User = user.Login,
+                        Genre = genre.Name,
+                        Performer = performer.FullName
                     });
                     await songsRep.Save();
                     return RedirectToAction("Index");

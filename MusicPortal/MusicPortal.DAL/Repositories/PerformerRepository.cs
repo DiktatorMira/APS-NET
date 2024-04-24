@@ -7,7 +7,6 @@ namespace MusicPortal.DAL.Repositories {
         private MainContext db;
         public PerformerRepository(MainContext context) => db = context;
         public async Task<IEnumerable<Performer>> GetAll() => await db.Performers.ToListAsync();
-        public IQueryable<Performer> GetQuery() => db.Performers;
         public async Task<Performer> GetById(int performerId) => await db.Performers.FirstOrDefaultAsync(p => p.Id == performerId);
         public async Task<Performer> GetByStr(string fullName) => await db.Performers.FirstOrDefaultAsync(p => p.FullName == fullName);
         public async Task<bool> IsStr(string fullName) => await db.Performers.AnyAsync(p => p.FullName == fullName);
