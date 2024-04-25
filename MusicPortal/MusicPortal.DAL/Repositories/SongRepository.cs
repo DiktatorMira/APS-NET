@@ -11,7 +11,20 @@ namespace MusicPortal.DAL.Repositories {
         public async Task<Song> GetByStr(string title) => await db.Songs.FirstOrDefaultAsync(s => s.Title == title);
         public async Task<bool> IsStr(string title) => await db.Songs.AnyAsync(s => s.Title == title);
         public async Task Add(Song song) => await db.Songs.AddAsync(song);
-        public void Update(Song song) => db.Entry(song).State = EntityState.Modified;
+        public async void Update(Song model) {
+            var song = await db.Songs.FirstOrDefaultAsync(s => s.Id == model.Id);
+            if (song == null) throw new Exception("Такой песни нет!");
+            song.Title = model.Title;
+            song.Path = model.Path;
+            song.UserId = model.UserId;
+            song.GenreId = model.GenreId;
+            song.ArtistId = model.ArtistId;
+            song.User = model.User;
+            song.Genre = model.Genre;
+            song.Performer = model.Performer;
+            db.Entry(song).State = EntityState.Detached;
+            db.Update(song);
+        }
         public async Task Delete(int songId) => db.Songs.Remove(await db.Songs.FindAsync(songId));
     }
 }
