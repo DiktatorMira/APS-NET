@@ -1,17 +1,17 @@
 ﻿@model MusicPortal.Models.Logon
 @{
-    ViewBag.Title = "Авторизация";
+    ViewBag.Title = @Resources.Resource.PageLoginTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <form asp-action="Login" enctype="multipart/form-data" class="forms log">
-    <h2>Вход</h2>
-    <input asp-for="Login" class="inputs" placeholder="Логин" />
+    <h2>@Resources.Resource.LoginTitle</h2>
+    <input asp-for="Login" class="inputs" placeholder="@Resources.Resource.LoginInp" />
     <span asp-validation-for="Login" class="text-danger"></span>
-    <input asp-for="Password" class="inputs" placeholder="Пароль" />
+    <input asp-for="Password" class="inputs" placeholder="@Resources.Resource.PasswordInp" />
     <span asp-validation-for="Password" class="text-danger"></span>
-    <input type="submit" value="Войти" class="btn" />
-    <a asp-action="ToRegister" class="href">Нет аккаунта?</a>
+    <input type="submit" value="@Resources.Resource.Entry" class="btn" />
+    <a asp-action="ToRegister" class="href">@Resources.Resource.NoAccount?</a>
 </form>
 
 @section Scripts {

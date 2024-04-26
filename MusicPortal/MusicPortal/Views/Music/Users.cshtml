@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<MusicPortal.BLL.DTO.UserDTO>
 @{
-    ViewBag.Title = "Музыкальный портал";
+    ViewBag.Title = @Resources.Resource.PageTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<a asp-action="Index" class="hrefbtn frth">Вернуться назад</a>
+<a asp-action="Index" class="hrefbtn frth">@Resources.Resource.Back</a>
 <div class="list">
     @foreach (var user in Model) {
         <div class="listplate">
@@ -13,14 +13,14 @@
             </div>
             <div class="rightplate">
                 @if (!user.IsAuthorized && user.Login != "Admin") {
-                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">Авторизовать</a>
-                    <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">Удалить</a>
+                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">@Resources.Resource.Authorize</a>
+                    <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">@Resources.Resource.Delete</a>
                 } else if (user.IsAuthorized && user.Login != "Admin") {
-                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">Деавторизовать</a>
-                    <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">Удалить</a>
+                    <a asp-action="Authorize" asp-route-userId="@user.Id" class="hrefbtn thrd">@Resources.Resource.Deauthorize</a>
+                    <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="hrefbtn thrd">@Resources.Resource.Delete</a>
                 } else {
-                    <a asp-action="Authorize" class="hrefbtn thrd disabled">Авторизовать</a>
-                    <a asp-action="DeleteUser" class="hrefbtn thrd disabled">Удалить</a>
+                    <a asp-action="Authorize" class="hrefbtn thrd disabled">@Resources.Resource.Authorize</a>
+                    <a asp-action="DeleteUser" class="hrefbtn thrd disabled">@Resources.Resource.Delete</a>
                 }
             </div>
         </div>

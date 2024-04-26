@@ -1,13 +1,13 @@
 ﻿@model MusicPortal.BLL.DTO.SongDTO
 @{
-    ViewBag.Title = "Музыкальный портал";
+    ViewBag.Title = @Resources.Resource.PageTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <form asp-action="EditSong" enctype="multipart/form-data" class="forms song">
     <input type="hidden" asp-for="Id" />
-    <h2>Изменение песни</h2>
-    <input asp-for="Title" class="inputs" placeholder="Название песни" value="@Model.Title" />
+    <h2>@Resources.Resource.SongEditTitle</h2>
+    <input asp-for="Title" class="inputs" placeholder="@Resources.Resource.SongTitle" value="@Model.Title" />
     <span asp-validation-for="Title" class="text-danger"></span>
     <select asp-for="Genre" class="inputs" value="@Model.Genre">
         @foreach (var genre in ViewBag.Genres) {
@@ -23,8 +23,8 @@
     <input class="btn file" asp-for="Path" type="file" name="uploadedFile" accept="audio/*" />
     <span asp-validation-for="Path" class="text-danger"></span>
     <div class="formbot">
-        <a asp-action="Index" class="hrefbtn inbot">Отмена</a>
-        <input type="submit" value="Изменить" class="btn inbot" />
+        <a asp-action="Index" class="hrefbtn inbot">@Resources.Resource.Reset</a>
+        <input type="submit" value="@Resources.Resource.Edit" class="btn inbot" />
     </div>
 </form>
 

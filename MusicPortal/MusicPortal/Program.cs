@@ -9,6 +9,7 @@ string? connection = builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddContext(connection!);
 builder.Services.AddSaveUnitService();
 
+builder.Services.AddScoped<ILangService, LangService>();
 builder.Services.AddScoped<ICryptographyService, CryptographyService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISongService, SongService>();
@@ -17,7 +18,6 @@ builder.Services.AddScoped<IPerformerService, PerformerService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
-
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.Name = "Session";

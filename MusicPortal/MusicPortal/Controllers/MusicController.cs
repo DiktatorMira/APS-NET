@@ -11,12 +11,14 @@ namespace MusicPortal.Controllers {
         private readonly IGenreService genreRep;
         private readonly IPerformerService performerRep;
         private readonly IWebHostEnvironment webHostEnvironment;
-        public MusicController(IUserService urep, ISongService srep, IGenreService grep, IPerformerService prep, IWebHostEnvironment host) {
+        private readonly ILangService langService;
+        public MusicController(IUserService urep, ISongService srep, IGenreService grep, IPerformerService prep, IWebHostEnvironment host, ILangService lServ) {
             usersRep = urep;
             songsRep = srep;
             genreRep = grep;
             performerRep = prep;
             webHostEnvironment = host;
+            langService = lServ;
         }
         public async Task<IActionResult> Index(int genre = 0, int performer = 0, int page = 1,
             SortState sortOrder = SortState.TitleAsc) {
@@ -42,6 +44,8 @@ namespace MusicPortal.Controllers {
                 var items = songs.Skip((page - 1) * 6).Take(6);
 
                 // формируем модель представления
+                HttpContext.Session.SetString("path", Request.Path);
+                ViewBag.Languages = langService.languageList();
                 return View(new IndexVM(
                     items,
                     new PageVM(count, page, 6),
@@ -61,6 +65,15 @@ namespace MusicPortal.Controllers {
             System.IO.File.Delete(oldFilePath);
             await songsRep.DeleteSong(songId);
             return RedirectToAction("Index");
+        }
+        public ActionResult ChangeCulture(string lang) {
+            string? returnUrl = HttpContext.Session.GetString("path") ?? "/Club/Index";
+            List<string> cultures = langService.languageList().Select(t => t.ShortName).ToList()!;
+            if (!cultures.Contains(lang)) lang = "ru";
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(10); // срок хранения куки - 10 дней
+            Response.Cookies.Append("lang", lang, option); // создание куки
+            return Redirect(returnUrl);
         }
         // Users.cshtml
         public async Task<IActionResult> ToUsers() => View("~/Views/Music/Users.cshtml", await usersRep.GetUsers());
@@ -146,12 +159,12 @@ namespace MusicPortal.Controllers {
         }
         public async Task<IActionResult> AddSong(IFormFile uploadedFile, SongDTO model) {
             if (ModelState.IsValid && !string.IsNullOrEmpty(HttpContext.Session.GetString("Login"))) {
-                if(uploadedFile == null)  ModelState.AddModelError("Path", "Выберите файл!");
+                if(uploadedFile == null)  ModelState.AddModelError("Path", Resources.Resource.ChooseFile);
                 else {
                     string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "musics");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadedFile.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    if (System.IO.File.Exists(filePath)) ModelState.AddModelError("Path", "Файл с таким именем уже существует");
+                    if (System.IO.File.Exists(filePath)) ModelState.AddModelError("Path", Resources.Resource.FileExist);
                     using (var fileStream = new FileStream(filePath, FileMode.Create)) await uploadedFile.CopyToAsync(fileStream);
 
                     var user = await usersRep.GetUserByLogin(HttpContext.Session.GetString("Login")!);

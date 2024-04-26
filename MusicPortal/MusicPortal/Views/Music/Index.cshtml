@@ -1,51 +1,60 @@
 ﻿@model MusicPortal.Models.IndexVM
 @{
-    ViewBag.Title = "Музыкальный портал";
+    ViewBag.Title = @Resources.Resource.PageTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <main class="page">
     <section class="menu">
         @if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "True") {
-            <p class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></p>
+            <p class="toptext">@Resources.Resource.Welcome, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">@Resources.Resource.Exit</a></p>
             <hr class="line"/>
-            <a asp-action="ToAddSong" class="hrefbtn">Добавить песню</a>
+            <a asp-action="ToAddSong" class="hrefbtn">@Resources.Resource.AddSong</a>
         }
         else if (Context.Session.GetString("Login") != "Admin" && Context.Session.GetString("Authorization") == "False") {
-            <p class="toptext">@Context.Session.GetString("Login"), вы не авторизованы! <a asp-action="Logout" class="href">Выйти</a></p>
+            <p class="toptext">@Context.Session.GetString("Login"), @Resources.Resource.NotAuthorize! <a asp-action="Logout" class="href">@Resources.Resource.Exit</a></p>
             <hr class="line" />
         }
         else {
-            <p class ="toptext">Вы в режиме администратора. <a asp-action="Logout" class="href">Выйти</a></p>
+            <p class="toptext">@Resources.Resource.InAdmin. <a asp-action="Logout" class="href">@Resources.Resource.Exit</a></p>
             <hr class="line" />
-            <a asp-action="ToUsers" class="hrefbtn">Управление пользователями</a>
-            <a asp-action="ToAddSong" class="hrefbtn">Добавить песню</a>
-            <a asp-action="ToGenres" class="hrefbtn">Каталог жанров</a>
-            <a asp-action="ToPerformers" class="hrefbtn">Каталог исполнителей</a>
+            <a asp-action="ToUsers" class="hrefbtn">@Resources.Resource.UserControl</a>
+            <a asp-action="ToAddSong" class="hrefbtn">@Resources.Resource.AddSong</a>
+            <a asp-action="ToGenres" class="hrefbtn">@Resources.Resource.GenreList</a>
+            <a asp-action="ToPerformers" class="hrefbtn">@Resources.Resource.PerformerList</a>
         }
+        <form class="botform" asp-action="ChangeCulture" asp-controller="Music">
+            <select class="inputs no-margin">
+                <option disabled selected>@Resources.Resource.ChooseLang</option>
+                @foreach (var language in ViewBag.Languages) {
+                    <option value="@language.ShortName">@language.Name</option>
+                }
+            </select>
+            <input type="submit" value="@Resources.Resource.Choose" class="btn no-margin">
+        </form>
     </section>
     <section class="songs">
         <div class="debug">
             <a class="hrefbtn fif" asp-action="Index" 
             asp-route-sortOrder="@(Model.SortVM!.TitleSort)" 
-            asp-route-genre="@(Model.FilterVM!.SelectedGenre)" 
-            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По названию</a>
+            asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
+               asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">@Resources.Resource.byName</a>
 
             <a class="hrefbtn fif" asp-action="Index"
             asp-route-sortOrder="@(Model.SortVM!.GenreSort)"
             asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
-            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По жанрам</a>
+               asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">@Resources.Resource.byGenre</a>
 
             <a class="hrefbtn fif" asp-action="Index"
             asp-route-sortOrder="@(Model.SortVM!.PerformerSort)"
             asp-route-genre="@(Model.FilterVM!.SelectedGenre)"
-            asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">По авторам</a>
+               asp-route-performer="@(Model.FilterVM!.SelectedPerformer)">@Resources.Resource.byPerformer</a>
 
             <form class="filtration" method="get">
-                <span>Жанр: </span>
+                <span>@Resources.Resource.Genre: </span>
                 <select class="inputs no2" name="genre" asp-items="Model.FilterVM!.Genres"></select>
-                <span>Автор: </span>
+                <span>@Resources.Resource.Performer: </span>
                 <select class="inputs no2" name="performer" asp-items="Model.FilterVM!.Performers"></select>
-                <input type="submit" value="Поиск" class="btn no" />
+                <input type="submit" value="@Resources.Resource.Search" class="btn no" />
             </form>
         </div>
         @foreach (var song in Model.Songs!) {
@@ -53,12 +62,12 @@
                 <span>@song.Title - @song.Performer | @song.Genre</span>
                 <audio controls class="audio">
                     <source src="@song.Path" type="audio/mpeg">
-                    Ваш браузер не поддерживает аудио элемент.
+                    @Resources.Resource.AudioAlert.
                 </audio>
                 <div class="songbut">
                     @if (Context.Session.GetString("Login") == "Admin") {
-                        <a asp-action="ToEditSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Изменить</a>
-                        <a asp-action="DeleteSong" asp-route-songId="@song.Id" class="hrefbtn thrd">Удалить</a>
+                        <a asp-action="ToEditSong" asp-route-songId="@song.Id" class="hrefbtn thrd">@Resources.Resource.Edit</a>
+                        <a asp-action="DeleteSong" asp-route-songId="@song.Id" class="hrefbtn thrd">@Resources.Resource.Delete</a>
                     } else { }
                 </div>
             </div>

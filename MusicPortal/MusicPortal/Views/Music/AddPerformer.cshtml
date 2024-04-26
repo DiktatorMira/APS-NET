@@ -1,16 +1,16 @@
 ﻿@model MusicPortal.BLL.DTO.PerformerDTO
 @{
-    ViewBag.Title = "Музыкальный портал";
+    ViewBag.Title = @Resources.Resource.PageTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <form asp-action="AddPerformer" class="forms mini">
-    <h2>Добавлениие исполнителя</h2>
-    <input asp-for="FullName" class="inputs" placeholder="ФИО исполнителя" />
+    <h2>@Resources.Resource.PerformerAddTitle</h2>
+    <input asp-for="FullName" class="inputs" placeholder="@Resources.Resource.FullnamePerformer" />
     <span asp-validation-for="FullName" class="text-danger"></span>
     <div class="formbot">
-        <a asp-action="ToPerformers" class="hrefbtn inbot">Отмена</a>
-        <input type="submit" value="Добавить" class="btn inbot" />
+        <a asp-action="ToPerformers" class="hrefbtn inbot">@Resources.Resource.Reset</a>
+        <input type="submit" value="@Resources.Resource.Add" class="btn inbot" />
     </div>
 </form>
 

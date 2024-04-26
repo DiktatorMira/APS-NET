@@ -81,6 +81,7 @@ h2 {
     display:flex;
 }
 .menu {
+    position: relative;
     width: 20%;
     height: 100%;
     background: #ebebeb;
@@ -201,6 +202,16 @@ h2 {
 .page-link:hover {box-shadow: 0px 2px 6px rgb(0,0,0,0.7);}
 .page-link:active{transform:scale(0.9);}
 .audio{width:35%;}
+.botform{
+    position:absolute;
+    bottom:1%;
+    height:6vh;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+.no-margin{margin:0;}
 
 /* Users.cshtml è Genres.cshtml */
 

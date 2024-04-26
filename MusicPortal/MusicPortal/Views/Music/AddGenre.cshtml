@@ -1,16 +1,16 @@
 ﻿@model MusicPortal.BLL.DTO.GenreDTO
 @{
-    ViewBag.Title = "Музыкальный портал";
+    ViewBag.Title = @Resources.Resource.PageTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <form asp-action="AddGenre" class="forms mini">
-    <h2>Добавлениие жанра</h2>
-    <input asp-for="Name" class="inputs" placeholder="Название жанра"/>
+    <h2>@Resources.Resource.GenreAddTitle</h2>
+    <input asp-for="Name" class="inputs" placeholder="@Resources.Resource.GenreName" />
     <span asp-validation-for="Name" class="text-danger"></span>
     <div class="formbot">
-        <a asp-action="ToGenres" class="hrefbtn inbot">Отмена</a>
-        <input type="submit" value="Добавить" class="btn inbot" />
+        <a asp-action="ToGenres" class="hrefbtn inbot">@Resources.Resource.Reset</a>
+        <input type="submit" value="@Resources.Resource.Add" class="btn inbot" />
     </div>
 </form>
 
