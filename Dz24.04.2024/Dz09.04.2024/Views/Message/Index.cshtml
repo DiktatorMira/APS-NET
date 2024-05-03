@@ -1,0 +1,106 @@
+﻿@model Dz09._04._2024.Models.CombinedMessages
+@{
+    ViewBag.Title = "Главная страница";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(function () {
+            $("#toreg").click(function (e) { // При нажатии на "Нет аккаунта?"
+                $(".loglayer").addClass("hide");
+                $(".reglayer").removeClass("hide");
+            });
+            $("#tolog").click(function (e) { // При нажатии на "Есть аккаунт?"
+                $(".reglayer").addClass("hide");
+                $(".loglayer").removeClass("hide");
+            });
+            $("#log").click(function (e) {
+                e.preventDefault();
+                let formData = new FormData();
+                formData.append("login", $("#login").val());
+                formData.append("password", $("#password").val());
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Login", "Message")', // URL для обработки входа
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        alert(response);
+                        $(".loglayer").removeClass("hide");
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.errors : "Произошла ошибка при выполнении запроса.";
+                        $(".text-danger").text(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+<div class="loglayer">
+    <form class="logform">
+        <h2>Вход</h2>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input name="Login" class="inputs" id='login' placeholder="Логин" required />
+        <span class="text-danger"></span>
+        <input name="Password" class="inputs" id='password' placeholder="Пароль" required />
+        <span class="text-danger"></span>
+        <input type="submit" value="Войти" class="btn" id="log" />
+        <a class="href" id="toreg">Нет аккаунта?</a>
+        <a class="href" id="isquest">Продолжить как гость</a>
+    </form>
+</div>
+<div class="reglayer hide">
+    <form class="regform">
+        <h2>Регистрация</h2>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input class="inputs" placeholder="Логин" required />
+        <span class="text-danger"></span>
+        <input class="inputs" placeholder="ФИО" required />
+        <span class="text-danger"></span>
+        <input class="inputs" placeholder="Пароль" required />
+        <span class="text-danger"></span>
+        <input class="inputs" placeholder="Повторить пароль" required />
+        <span class="text-danger"></span>
+        <input type="submit" value="Зарегистрироваться" class="btn" id="reg" />
+        <a class="href" id="tolog">Есть аккаунт?</a>
+    </form>
+</div>
+<header class="top">
+    @if (Context.Session.GetString("Login") != "Guest") {
+        <h4 class="toptext">Добро пожаловать, @Context.Session.GetString("Login"). <a asp-action="Logout" class="href">Выйти</a></h4>
+    } else {
+        <h3 class="toptext">Вы в режиме гостя. Чтобы иметь возможность написать, пожалуйста, <a asp-action="ToRegister" class="href">зарегистрируйтесь</a> или <a asp-action="ToLogin" class="href">войдите</a>.</h3>
+    }
+</header>
+<section class="mess">
+    @foreach (var message in Model.Messages!)  {
+        <div class="message">
+            <div class="mestop">
+                <p>@message.User?.Login (@message.User?.FullName)</p>
+                <p>@message.Date.ToString("dd/MM/yyyy-HH:mm:ss")</p>
+            </div>
+            <p class="cont">@message.Content</p>
+        </div>
+    }
+</section>
+<form asp-action="Send" enctype="multipart/form-data" class="sends">
+    @if (Context.Session.GetString("Login") != "Guest") {
+        @Html.AntiForgeryToken()
+        <div class="formes">
+            <textarea asp-for="MessageModel!.Content" class="area" placeholder="Введите сообщение..."></textarea>
+            <span asp-validation-for="MessageModel!.Content" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Отправить" class="btn second" />
+    } else {
+        <div class="formes">
+            <textarea asp-for="MessageModel!.Content" class="area" placeholder="Сначало авторизуйтесь!" readonly></textarea>
+            <span asp-validation-for="MessageModel!.Content" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Недоступно" class="btn second" disabled />
+    }
+</form>
