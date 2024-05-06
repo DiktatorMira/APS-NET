@@ -3,8 +3,10 @@ using MusicPortal.BLL.Services;
 using MusicPortal.BLL.DTO;
 using MusicPortal.Models;
 using MusicPortal.Services;
+using MusicPortal.Infrastructure;
 
 namespace MusicPortal.Controllers {
+    [Culture]
     public class RegistrationController : Controller {
         private readonly IUserService usersRep;
         private readonly ICryptographyService cryptography;

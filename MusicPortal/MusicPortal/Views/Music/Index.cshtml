@@ -22,8 +22,8 @@
             <a asp-action="ToGenres" class="hrefbtn">@Resources.Resource.GenreList</a>
             <a asp-action="ToPerformers" class="hrefbtn">@Resources.Resource.PerformerList</a>
         }
-        <form class="botform" asp-action="ChangeCulture" asp-controller="Music">
-            <select class="inputs no-margin">
+        <form class="botform" asp-action="ChangeCulture" asp-controller="Music" method="post">
+            <select class="inputs no-margin" name="lang">
                 <option disabled selected>@Resources.Resource.ChooseLang</option>
                 @foreach (var language in ViewBag.Languages) {
                     <option value="@language.ShortName">@language.Name</option>

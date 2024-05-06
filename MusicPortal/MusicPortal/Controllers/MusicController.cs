@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPortal.Models;
-using Microsoft.EntityFrameworkCore;
 using MusicPortal.BLL.Services;
 using MusicPortal.BLL.DTO;
+using MusicPortal.Infrastructure;
 
 namespace MusicPortal.Controllers {
+    [Culture]
     public class MusicController : Controller {
         private readonly IUserService usersRep;
         private readonly ISongService songsRep;
@@ -27,7 +28,6 @@ namespace MusicPortal.Controllers {
                 // фильтрация
                 if (genre != 0) songs = songs.Where(s => s.GenreId == genre);
                 if (performer != 0) songs = songs.Where(s => s.ArtistId == performer);
-
 
                 songs = sortOrder switch {
                     SortState.TitleDesc => songs.OrderByDescending(s => s.Title).ToList(),
@@ -66,7 +66,7 @@ namespace MusicPortal.Controllers {
             await songsRep.DeleteSong(songId);
             return RedirectToAction("Index");
         }
-        public ActionResult ChangeCulture(string lang) {
+        public IActionResult ChangeCulture(string lang) {
             string? returnUrl = HttpContext.Session.GetString("path") ?? "/Club/Index";
             List<string> cultures = langService.languageList().Select(t => t.ShortName).ToList()!;
             if (!cultures.Contains(lang)) lang = "ru";

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPortal.BLL.Services;
+using MusicPortal.Infrastructure;
 using MusicPortal.Models;
 using MusicPortal.Services;
 
 namespace MusicPortal.Controllers {
+    [Culture]
     public class AuthorizationController : Controller {
         private readonly IUserService usersRep;
         private readonly ICryptographyService cryprography;
