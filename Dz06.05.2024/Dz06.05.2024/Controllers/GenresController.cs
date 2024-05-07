@@ -8,29 +8,30 @@ namespace Dz06._05._2024.Controllers {
     public class GenresController : ControllerBase {
         private readonly Context db;
         public GenresController(Context context) => db = context;
-        [HttpGet("GetGenres")]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetGenres() => await db.Set<Genre>().ToListAsync();
-        [HttpGet("GetGenre/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Genre>>> GetGenres() => await db.Genres.ToListAsync();
+        [HttpGet("{id}")]
         public async Task<ActionResult<Genre>> GetGenre(int id) {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var genre = await db.Genres.SingleOrDefaultAsync(g => g.Id == id);
             if (genre == null) return NotFound();
-            return genre;
+            return new ObjectResult(genre);
         }
-        [HttpPost("AddGenre")]
+        [HttpPost]
         public async Task<ActionResult<Genre>> AddGenre(Genre genre) {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             db.Genres.Add(genre);
             await db.SaveChangesAsync();
             return Ok(genre);
         }
-        [HttpPut("EditGenre")]
+        [HttpPut]
         public async Task<ActionResult<Genre>> EditGenre(Genre genre) {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             db.Entry(genre).State = EntityState.Modified;
             await db.SaveChangesAsync();
             return Ok(genre);
         }
-        [HttpDelete("DeleteGenre/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Genre>> DeleteGenre(int id) {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var genre = await db.Genres.SingleOrDefaultAsync(m => m.Id == id);

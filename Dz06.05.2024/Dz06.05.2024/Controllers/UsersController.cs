@@ -8,29 +8,30 @@ namespace Dz06._05._2024.Controllers {
     public class UsersController : ControllerBase {
         private readonly Context db;
         public UsersController(Context context) => db = context;
-        [HttpGet("GetUsers")]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers() => await db.Set<User>().ToListAsync();
-        [HttpGet("GetUser/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers() => await db.Users.ToListAsync();
+        [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id) {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var user = await db.Users.SingleOrDefaultAsync(u => u.Id == id);
             if (user == null) return NotFound();
-            return user;
+            return new ObjectResult(user);
         }
-        [HttpPost("AddUser")]
+        [HttpPost]
         public async Task<ActionResult<User>> AddUser(User user) {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             db.Users.Add(user);
             await db.SaveChangesAsync();
             return Ok(user);
         }
-        [HttpPut("EditUser")]
+        [HttpPut]
         public async Task<ActionResult<User>> EditUser(User user) {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            db.Entry(user).State = EntityState.Modified;
+            db.Update(user);
             await db.SaveChangesAsync();
             return Ok(user);
         }
-        [HttpDelete("DeleteUser/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id) {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var user = await db.Users.SingleOrDefaultAsync(m => m.Id == id);
