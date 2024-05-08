@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Dz06._05._2024.Models {
+namespace WebApiServer.Models {
     public class Context : DbContext {
         public DbSet<User> Users { get; set; }
         public DbSet<Genre> Genres { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Dz06._05._2024.Models {
+namespace WebApiServer.Models {
     public class User {
         public int Id { get; set; }
         [Required(ErrorMessage = "Поле не должно быть пустым!")]

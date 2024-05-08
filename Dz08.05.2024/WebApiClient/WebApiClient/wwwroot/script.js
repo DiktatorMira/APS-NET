@@ -20,7 +20,7 @@
     };
     (function GetDatabase() {
         $.ajax({
-            url: 'https://localhost:7005/api/users',
+            url: 'https://localhost:7061/api/users',
             method: "GET",
             contentType: "application/json",
             success: function (users) {
@@ -35,7 +35,7 @@
             }
         });
         $.ajax({
-            url: 'https://localhost:7005/api/genres',
+            url: 'https://localhost:7061/api/genres',
             method: "GET",
             contentType: "application/json",
             success: function (genres) {
@@ -50,7 +50,7 @@
             }
         });
         $.ajax({
-            url: 'https://localhost:7005/api/performers',
+            url: 'https://localhost:7061/api/performers',
             method: "GET",
             contentType: "application/json",
             success: function (performers) {
@@ -67,7 +67,7 @@
     })();
     function CreateUser(userLogin, userFio, userPassword) {
         $.ajax({
-            url: "https://localhost:7005/api/users",
+            url: "https://localhost:7061/api/users",
             contentType: "application/json",
             method: "POST",
             data: JSON.stringify({
@@ -93,7 +93,7 @@
             password: userPassword
         });
         $.ajax({
-            url: "https://localhost:7005/api/users",
+            url: "https://localhost:7061/api/users",
             contentType: "application/json",
             method: "PUT",
             data: request,
@@ -123,7 +123,7 @@
     });
     function CreateGenre(genreName) {
         $.ajax({
-            url: "https://localhost:7005/api/genres",
+            url: "https://localhost:7061/api/genres",
             contentType: "application/json",
             method: "POST",
             data: JSON.stringify({
@@ -145,7 +145,7 @@
             name: genreName
         });
         $.ajax({
-            url: "https://localhost:7005/api/genres",
+            url: "https://localhost:7061/api/genres",
             contentType: "application/json",
             method: "PUT",
             data: request,
@@ -173,7 +173,7 @@
     });
     function CreatePerformer(performerFio) {
         $.ajax({
-            url: "https://localhost:7005/api/performers",
+            url: "https://localhost:7061/api/performers",
             contentType: "application/json",
             method: "POST",
             data: JSON.stringify({
@@ -195,7 +195,7 @@
             fio: performerFio
         });
         $.ajax({
-            url: "https://localhost:7005/api/performers",
+            url: "https://localhost:7061/api/performers",
             contentType: "application/json",
             method: "PUT",
             data: request,
@@ -223,7 +223,7 @@
     });
     function GetUser(id) {
         $.ajax({
-            url: 'https://localhost:7005/api/users/' + id,
+            url: 'https://localhost:7061/api/users/' + id,
             method: 'GET',
             contentType: "application/json",
             success: function (user) {
@@ -243,7 +243,7 @@
     function DeleteUser(id) {
         if (!confirm("Вы действительно желаете удалить пользователя?")) return;
         $.ajax({
-            url: "https://localhost:7005/api/users/" + id,
+            url: "https://localhost:7061/api/users/" + id,
             contentType: "application/json",
             method: "DELETE",
             success: function (user) {
@@ -259,7 +259,7 @@
     });
     function GetGenre(id) {
         $.ajax({
-            url: 'https://localhost:7005/api/genres/' + id,
+            url: 'https://localhost:7061/api/genres/' + id,
             method: 'GET',
             contentType: "application/json",
             success: function (genre) {
@@ -277,7 +277,7 @@
     function DeleteGenre(id) {
         if (!confirm("Вы действительно желаете удалить жанр?")) return;
         $.ajax({
-            url: "https://localhost:7005/api/genres/" + id,
+            url: "https://localhost:7061/api/genres/" + id,
             contentType: "application/json",
             method: "DELETE",
             success: function (genre) {
@@ -293,7 +293,7 @@
     });
     function GetPerformer(id) {
         $.ajax({
-            url: 'https://localhost:7005/api/performers/' + id,
+            url: 'https://localhost:7061/api/performers/' + id,
             method: 'GET',
             contentType: "application/json",
             success: function (performer) {
@@ -311,7 +311,7 @@
     function DeletePerformer(id) {
         if (!confirm("Вы действительно желаете удалить исполнителя?")) return;
         $.ajax({
-            url: "https://localhost:7005/api/performers/" + id,
+            url: "https://localhost:7061/api/performers/" + id,
             contentType: "application/json",
             method: "DELETE",
             success: function (performer) {
