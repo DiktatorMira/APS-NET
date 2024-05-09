@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" initial-scale="1.0">
+        <title>Чат</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src='script.js'></script>
+    </head>
+    <body>
+        <div class="main">
+            <section class="logform" id="loginBlock">
+                <h2>Авторизация</h2>
+                <input id="txtUserName" class="inputs" type="text" placeholder="Логин" />
+                <input id="btnLogin" class="btns" type="button" value="Войти" />
+            </section>
+            <section id="chatBody" class="body">
+                <section class="forhead">
+                    <div id="header"></div>
+                </section>
+                <section class="mess">
+                    <div id="chatroom" class="messages">
+
+                    </div>
+                    <div class="info">
+                        <p><b>Все пользователи:</b></p>
+                        <ul id="chatusers"></ul>
+                    </div>
+                </section>
+                <section class="send">
+                    <textarea id="message" class="message" placeholder="Введите сообщение..."></textarea>
+                    <input id="sendmessage" class="btns second" type="button" value="Отправить"/>
+                </section>
+            </section>
+            <input id="hdId" type="hidden" />
+            <input id="username" type="hidden" />
+        </div>
+    </body>
+</html>
