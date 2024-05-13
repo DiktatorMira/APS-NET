@@ -1,0 +1,27 @@
+﻿@page "{handler?}"
+@model Dz13._05._024.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Фильмы";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<a asp-page="./Create" class="addbut">Добавить фильм</a>
+<div class="main">
+    @foreach (var film in Model.Film) {
+        <div class="filmplate">
+            <img class="image" src="@film.PosterPath" />
+            <div class="finfo">
+                <span>@film.Title</span>
+                <span>@film.Director</span>
+                <span>@film.Genre</span>
+                <span>@film.Date.ToShortDateString()</span>
+                <div class="bottom">
+                    <a asp-page="./Details" asp-route-id="@film.Id" class="inbutton">Подробнее</a>
+                    <a asp-page="./Delete" asp-route-id="@film.Id" class="inbutton">Удалить</a>
+                    <a asp-page="./Edit" asp-route-id="@film.Id" class="inbutton">Изменить</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

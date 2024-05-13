@@ -1,0 +1,38 @@
+﻿@page
+@model Dz13._05._024.Pages.CreateModel
+
+@{
+    ViewData["Title"] = "Создание";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<form method="post" enctype="multipart/form-data" class="mplate">
+    <div class="left">
+        <img class="image" id="previewImage" />
+        <label for="addimg" class="leftbtn">
+            <span>Выберите файл</span>
+            <input asp-for="Film.PosterPath" id="addimg" type="file" name="uploadedFile" style="display: none;" accept="image/*" />
+        </label>
+    </div>
+    <div class="info">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Film.Title" type="text" class="inputs" placeholder="Название фильма"/>
+        <span asp-validation-for="Film.Title" class="text-danger"></span>
+        <input asp-for="Film.Director" type="text" class="inputs" placeholder="Режиссёр" />
+        <span asp-validation-for="Film.Director" class="text-danger"></span>
+        <input asp-for="Film.Genre" type="text" class="inputs" placeholder="Жанр" />
+        <span asp-validation-for="Film.Genre" class="text-danger"></span>
+        <input asp-for="Film.Date" type="date" class="inputs" />
+        <span asp-validation-for="Film.Date" class="text-danger"></span>
+        <textarea asp-for="Film.Description" class="inputs area" placeholder="Описание"></textarea>
+        <span asp-validation-for="Film.Description" class="text-danger"></span>
+        <div class="botm trd">
+            <a asp-page="./Index" class="inbutton">Отмена</a>
+            <input type="submit" value="Добавить" class="inbutton" />
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

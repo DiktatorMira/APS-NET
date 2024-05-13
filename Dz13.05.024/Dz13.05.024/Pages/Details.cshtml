@@ -1,0 +1,19 @@
+﻿@page
+@model Dz13._05._024.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Подробности";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="mplate">
+    <img class="img" src="@Html.DisplayFor(model => model.Film.PosterPath)" />
+    <div class="info">
+        <span>@Html.DisplayFor(model => model.Film.Title)</span>
+        <span>@Html.DisplayFor(model => model.Film.Director)</span>
+        <span>@Html.DisplayFor(model => model.Film.Genre)</span>
+        <span>@Model.Film.Date.ToShortDateString()</span>
+        <span>@Html.DisplayFor(model => model.Film.Description)</span>
+        <a asp-page="./Index" class="bot">Венрунться обратно</a>
+    </div>
+</div>

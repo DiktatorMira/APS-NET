@@ -1,0 +1,24 @@
+﻿@page
+@model Dz13._05._024.Pages.DeleteModel
+
+@{
+    ViewData["Title"] = "Удаление";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Вы точно хотите удалить этот фильм?</h1>
+<div class="mplate secnd">
+    <img class="img" src="@Html.DisplayFor(model => model.Film!.PosterPath)" />
+    <div class="info">
+        <span>@Html.DisplayFor(model => model.Film!.Title)</span>
+        <span>@Html.DisplayFor(model => model.Film!.Director)</span>
+        <span>@Html.DisplayFor(model => model.Film!.Genre)</span>
+        <span>@Model.Film!.Date.ToShortDateString()</span>
+        <span>@Html.DisplayFor(model => model.Film!.Description)</span>
+        <form method="post" class="botm sec">
+            <a asp-page="./Index" class="inbutton">Нет</a>
+            <input type="hidden" asp-for="Film!.Id" />
+            <input type="submit" value="Да" class="inbutton" />
+        </form>
+    </div>
+</div>
