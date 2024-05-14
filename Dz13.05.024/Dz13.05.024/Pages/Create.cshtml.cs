@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dz13._05._024.Models;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Dz13._05._024.Pages {
     public class CreateModel : PageModel {
-        private readonly Context db;
+        private readonly IRepository rep;
         private readonly IWebHostEnvironment baseDirectory;
         [BindProperty]
         public Films Film { get; set; } = default!;
-        public CreateModel(Context context, IWebHostEnvironment web){
-            db = context;
+        public CreateModel(IRepository r, IWebHostEnvironment web){
+            rep = r;
             baseDirectory = web;
         }
         public IActionResult OnGet() => Page();
         public async Task<IActionResult> OnPostAsync(IFormFile uploadedFile) {
             if (!ModelState.IsValid && uploadedFile == null) return Page();
-            if (db.Films.Any(f => f.Title == Film.Title)) {
+            if (rep.IsTitleExists(Film.Title!)) {
                 ModelState.AddModelError("Title", "Такое название фильма уже есть!");
                 return Page();
             }
@@ -29,8 +28,8 @@ namespace Dz13._05._024.Pages {
             }
             using (var fileStream = new FileStream(filePath, FileMode.Create)) await uploadedFile.CopyToAsync(fileStream);
             Film.PosterPath = "/Images/" + uniqueFileName; // Путь к сохранённому файлу
-            db.Films.Add(Film);
-            await db.SaveChangesAsync();
+            await rep.Add(Film);
+            await rep.Save();
             return RedirectToPage("./Index");
         }
     }

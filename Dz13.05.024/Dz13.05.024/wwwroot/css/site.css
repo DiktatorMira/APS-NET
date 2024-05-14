@@ -2,6 +2,19 @@ html {
     margin: 0;
     font-family: 'Sans Serif Collection';
 }
+::-webkit-scrollbar {
+    background: linear-gradient(to bottom, #484848, #292a6e);
+    width: 15px;
+}
+::-webkit-scrollbar-track {
+    background: #525252;
+    border-radius: 7px;
+    box-shadow: inset 0px 0px 4px rgb(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #292a6e, #484848);
+    border-radius: 20px;
+}
 body {
     height: 100%;
     width: 100%;
